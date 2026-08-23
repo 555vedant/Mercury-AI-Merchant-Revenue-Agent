@@ -33,4 +33,4 @@ Start the minimal FastAPI backend:
 uvicorn api:app --reload
 ```
 
-It provides `POST /negotiate`, `POST /payment/create`, `GET /negotiation/{id}`, and `POST /webhooks/razorpay`. Negotiations and audit records are kept in memory only. A payment order is created only when the stored negotiation has an `ALLOW` policy result.
+It provides `GET /catalog`, `POST /negotiate`, `POST /payment/create`, `GET /negotiation/{id}`, and `POST /webhooks/razorpay`. Select one catalog SKU per negotiation. Negotiations and audit records are kept in memory only. A payment order is created only when the stored negotiation has an `ALLOW` policy result.
