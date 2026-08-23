@@ -7,6 +7,7 @@ from typing import Any
 from uuid import uuid4
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 from agenticpay import (
@@ -26,6 +27,12 @@ from agenticpay import (
 from agenticpay.negotiation_runner import run_negotiation
 
 app = FastAPI(title="Mercury API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173 ,http://127.0.0.1:8000/payment/create"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "X-Razorpay-Signature"],
+)
 
 merchant = MerchantData(
     sku="WINTER-JACKET-001",
@@ -75,6 +82,21 @@ def _policy_for(result: dict[str, Any]) -> Any:
     )
 
 
+def _negotiation_response(negotiation_id: str, record: dict[str, Any]) -> dict[str, Any]:
+    result = record["result"]
+    policy_result = record["policy_result"]
+    return {
+        "negotiation_id": negotiation_id,
+        "status": result["status"],
+        "agreed_price": result["info"]["agreed_price"],
+        "merchant": revenue_engine.summary(),
+        "revenue": result["info"].get("seller_revenue", {}),
+        "policy": policy_result.to_dict() if policy_result else None,
+        "audit_trail": record["audit_trail"].as_dicts(),
+        "conversation_history": result["observation"]["conversation_history"],
+    }
+
+
 @app.post("/negotiate")
 def negotiate(request: NegotiateRequest) -> dict[str, Any]:
     buyer = BuyerAgent(model, buyer_max_price=request.buyer_max_price)
@@ -99,13 +121,7 @@ def negotiate(request: NegotiateRequest) -> dict[str, Any]:
         "policy_result": policy_result,
         "audit_trail": audit_trail,
     }
-    return {
-        "negotiation_id": negotiation_id,
-        "status": result["status"],
-        "agreed_price": result["info"]["agreed_price"],
-        "policy": policy_result.to_dict() if policy_result else None,
-        "conversation_history": result["observation"]["conversation_history"],
-    }
+    return _negotiation_response(negotiation_id, negotiations[negotiation_id])
 
 
 @app.post("/payment/create")
@@ -146,12 +162,4 @@ def get_negotiation(negotiation_id: str) -> dict[str, Any]:
     negotiation = negotiations.get(negotiation_id)
     if negotiation is None:
         raise HTTPException(status_code=404, detail="Negotiation not found.")
-    result = negotiation["result"]
-    policy_result = negotiation["policy_result"]
-    return {
-        "negotiation_id": negotiation_id,
-        "status": result["status"],
-        "agreed_price": result["info"]["agreed_price"],
-        "policy": policy_result.to_dict() if policy_result else None,
-        "conversation_history": result["observation"]["conversation_history"],
-    }
+    return _negotiation_response(negotiation_id, negotiation)

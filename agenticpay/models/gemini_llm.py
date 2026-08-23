@@ -23,7 +23,7 @@ load_dotenv()
 class GeminiLLM(BaseLLM):
     """Gemini text model with conservative free-tier request pacing."""
 
-    def __init__(self, model: str = "gemini-3.6-flash", api_key: Optional[str] = None, min_request_interval: float = 13.0):
+    def __init__(self, model: str = "gemini-3.5-flash-lite", api_key: Optional[str] = None, min_request_interval: float = 13.0):
         api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY is required. Add it to .env or set it in your environment.")
@@ -59,9 +59,9 @@ class GeminiLLM(BaseLLM):
                 raise
             finally:
                 self._last_request_at = time.monotonic()
-        if not response.text:
-            raise RuntimeError("Gemini returned no text response.")
-        return response.text
+        # Price decisions are made by the agents; Gemini only supplies wording.
+        # An empty response should therefore fall back to the agent's default text.
+        return response.text or ""
 
     def __repr__(self) -> str:
         return f"GeminiLLM(model={self.model!r})"

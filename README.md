@@ -12,7 +12,7 @@ $env:RAZORPAY_KEY_SECRET = "your_test_key_secret"
 python run_negotiation.py
 ```
 
-The default model is `gemini-3.6-flash`.
+The default model is the lightweight `gemini-3.5-flash-lite`. Price decisions are deterministic; if Gemini returns no text, the agents use a built-in fallback sentence and continue negotiating.
 
 To create a Razorpay Test Mode order after an allowed negotiation, opt in explicitly:
 
