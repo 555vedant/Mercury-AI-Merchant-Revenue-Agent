@@ -9,6 +9,8 @@ class MerchantData:
     fulfillment_cost: float = 0.0
     marketing_cost: float = 0.0
     minimum_margin_rate: float = 0.20
+    category: str = "general"
+    inventory_quantity: int = 0
 
     @property
     def total_cost(self) -> float:

@@ -18,9 +18,11 @@ class RevenueEngine:
     def target_price(self) -> float:
         return max(self.merchant.list_price, self.minimum_viable_price)
 
-    def evaluate(self, price: float) -> Dict[str, float]:
-        revenue = float(price)
-        cost = self.merchant.total_cost
+    def evaluate(self, price: float, quantity: int = 1) -> Dict[str, float]:
+        if quantity <= 0:
+            raise ValueError("quantity must be positive.")
+        revenue = float(price) * quantity
+        cost = self.merchant.total_cost * quantity
         profit = revenue - cost
         return {"revenue": round(revenue, 2), "cost": round(cost, 2), "profit": round(profit, 2), "margin_rate": round(profit / revenue, 4) if revenue else 0.0}
 
