@@ -167,6 +167,18 @@
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": -0.2,
       "REJECT": 0.0
+    },
+    "[\"CERAMIC-MUG-006\",0,20,20,0.22,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"CERAMIC-MUG-006\",0,20,20,0.42,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": -0.72
     }
   },
   "metrics": {
@@ -177,7 +189,7 @@
       "accepted_price": 0.0
     },
     "after": {
-      "negotiations": 12,
+      "negotiations": 14,
       "conversions": 8,
       "profit": 116.16,
       "accepted_price": 347.16

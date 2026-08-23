@@ -255,6 +255,7 @@ function NegotiationPage({ product, onBack, onDone }) {
   const policy = negotiation?.policy
   const revenue = negotiation?.revenue || {}
   const started = !!negotiation || loading
+  const auditEntries = Array.isArray(negotiation?.audit_trail) ? negotiation.audit_trail : []
 
   useEffect(() => {
     ledgerEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
@@ -398,8 +399,50 @@ function NegotiationPage({ product, onBack, onDone }) {
           <div>
             <strong>{policy.decision === 'ALLOW' ? 'Order approved' : 'Order needs review'}</strong>
             <p>{policy.reason}</p>
+            <div className="decision-meta">
+              <span>Decision: {policy.decision}</span>
+              <span>Product: {product.name}</span>
+              <span>Price: {money(negotiation.agreed_price)}</span>
+              <span>Inventory: {product.inventory_quantity ?? '—'}</span>
+            </div>
           </div>
         </div>
+      )}
+
+      {auditEntries.length > 0 && (
+        <section className="audit-panel">
+          <div className="conversation-card-heading">
+            <h2>Audit trail</h2>
+          </div>
+          <div className="audit-list">
+            {auditEntries.map((entry, index) => {
+              const data = entry?.data || {}
+              const decision = data.decision || data.status || entry?.event || 'Unknown'
+              const reason = data.reason || 'No reason recorded.'
+              const productName = data.product || product.name
+              const price = data.agreed_price ?? data.attempted_price ?? data.amount
+              const failedRule = data.failed_rule || (Array.isArray(data.failed_rules) ? data.failed_rules[0] : null)
+              return (
+                <div key={`${entry?.timestamp || index}-${index}`} className="audit-entry">
+                  <div className="audit-header">
+                    <strong>{decision}</strong>
+                    <span>{new Date(entry?.timestamp || Date.now()).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}</span>
+                  </div>
+                  <div className="audit-grid">
+                    <div><span>Reason</span><b>{reason}</b></div>
+                    <div><span>Product</span><b>{productName}</b></div>
+                    {price != null && <div><span>Price</span><b>{money(price)}</b></div>}
+                    {failedRule && <div><span>Failed rule</span><b>{failedRule}</b></div>}
+                    {data.inventory != null && <div><span>Inventory</span><b>{data.inventory}</b></div>}
+                    {data.margin != null && <div><span>Margin</span><b>{Number(data.margin * 100).toFixed(1)}%</b></div>}
+                    {data.discount != null && <div><span>Discount</span><b>{Number(data.discount * 100).toFixed(1)}%</b></div>}
+                    {data.amount != null && <div><span>Amount</span><b>{money(data.amount)}</b></div>}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
       )}
 
       {/* <LearningMetrics metrics={negotiation?.learning_metrics} /> */}

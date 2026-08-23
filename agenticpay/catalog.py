@@ -11,7 +11,7 @@ CATALOG: tuple[MerchantData, ...] = (
     MerchantData("RUNNING-SHOES-003", 120.00, 58.00, 7.00, 5.00, 0.20, "footwear", 18),
     MerchantData("STUDIO-HEADPHONES-004", 180.00, 92.00, 5.00, 6.00, 0.20, "electronics", 9),
     MerchantData("SMART-WATCH-005", 220.00, 120.00, 5.00, 8.00, 0.20, "electronics", 7),
-    MerchantData("CERAMIC-MUG-006", 28.00, 9.00, 3.00, 2.00, 0.20, "home", 40),
+    MerchantData("CERAMIC-MUG-006", 28.00, 9.00, 3.00, 2.00, 0.20, "home", 0),
 )
 
 FEATURES: dict[str, tuple[str, ...]] = {

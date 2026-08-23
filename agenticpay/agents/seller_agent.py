@@ -1,6 +1,8 @@
 ﻿"""Seller negotiation agent with merchant revenue controls."""
 import json
 from typing import Any, Dict, List, Optional
+
+from agenticpay.audit import AuditTrail
 from agenticpay.agents.base_agent import BaseAgent
 from agenticpay.commerce import MerchantData
 from agenticpay.models.base_llm import BaseLLM
@@ -9,7 +11,7 @@ from agenticpay.merchant_policy import MerchantPolicy, reward_for_episode
 from agenticpay.policy_gate import PolicyConfig, PolicyContext, PolicyGate
 
 class SellerAgent(BaseAgent):
-    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None):
+    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None, audit_trail: Optional[AuditTrail] = None):
         super().__init__(model, role_description, name)
         self.seller_min_price = seller_min_price
         self.revenue_engine = RevenueEngine(merchant_data) if merchant_data else None
@@ -20,6 +22,30 @@ class SellerAgent(BaseAgent):
         self.last_action: Optional[str] = None
         self.last_state: Optional[str] = None
         self.learned_at_start = False
+        self.audit_trail = audit_trail
+
+    def _record_decision(self, action: str, *, reason: str, offer_price: Optional[float], attempted_price: Optional[float], failed_rule: Optional[str] = None) -> None:
+        if not self.audit_trail:
+            return
+        product_info = self.context.get("product_info") if isinstance(self.context, dict) else None
+        product_name = product_info.get("name") if isinstance(product_info, dict) else None
+        inventory = getattr(self.revenue_engine.merchant, "inventory_quantity", None) if self.revenue_engine else None
+        margin = self.revenue_engine.evaluate(offer_price)["margin_rate"] if self.revenue_engine and offer_price is not None else None
+        discount = None
+        if self.revenue_engine and offer_price is not None and self.revenue_engine.merchant.list_price:
+            discount = max(0.0, (self.revenue_engine.merchant.list_price - offer_price) / self.revenue_engine.merchant.list_price)
+        self.audit_trail.record_negotiation_event(
+            status=action,
+            reason=reason,
+            product=product_name,
+            agreed_price=offer_price,
+            attempted_price=attempted_price,
+            failed_rule=failed_rule,
+            inventory=inventory,
+            margin=margin,
+            discount=discount,
+            amount=offer_price,
+        )
 
     def respond(self, conversation_history: List[Dict[str, Any]], current_state: Dict[str, Any]) -> str:
         if not self.initialized:
@@ -65,6 +91,20 @@ class SellerAgent(BaseAgent):
             self.last_action = "REJECT" if not self.is_offer_allowed(price) else "TARGET_COUNTER"
         if self.last_action == "TARGET_COUNTER" and not self.is_offer_allowed(price):
             self.last_action = "REJECT"
+        reason = "The seller chose a pricing strategy aligned with merchant guardrails."
+        failed_rule = None
+        if self.last_action == "REJECT":
+            reason = "The seller rejected the offer because it failed merchant policy checks."
+            if self.policy_gate and self.revenue_engine:
+                policy_result = self.policy_gate.evaluate(PolicyContext(agreed_price=price, quantity=1, category=self.revenue_engine.merchant.category, merchant=self.revenue_engine.merchant))
+                if not policy_result.is_allowed:
+                    reason = policy_result.reason
+                    failed_rule = policy_result.failed_rules[0] if policy_result.failed_rules else None
+        elif self.last_action == "ACCEPT":
+            reason = "The seller accepted the buyer's offer because it satisfies policy and profitability rules."
+        elif self.last_action in {"SMALL_COUNTER", "TARGET_COUNTER"}:
+            reason = "The seller countered with a price that respects margin and discount guardrails."
+        self._record_decision(self.last_action, reason=reason, offer_price=price, attempted_price=buyer_price, failed_rule=failed_rule)
         self.last_offer = price
         self.last_decision = self.revenue_engine.evaluate(price) if self.revenue_engine else {"revenue": price, "cost": 0.0, "profit": price, "margin_rate": 1.0}
         prompt = f"""You are an e-commerce seller. Product: {self.context.get('product_info', {})}. Conversation: {self._history_text(conversation_history)}. Your selected strategy is {self.last_action} and your valid offer is ₹{price:.2f}. Return JSON only: {{"message":"one concise, polite sentence supporting this strategy and offer"}}. Do not reveal internal costs, margin rules, or use price tags."""

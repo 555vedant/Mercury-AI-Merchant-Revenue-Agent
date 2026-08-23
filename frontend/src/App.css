@@ -271,6 +271,51 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(31, 77, 63, 0.2
 .decision.block, .decision.human-approval, .decision.timeout { background: var(--warn-bg); }
 .decision.block strong, .decision.human-approval strong, .decision.timeout strong { color: var(--warn-fg); }
 
+.decision-meta {
+  display: flex; flex-wrap: wrap; gap: 8px 12px; margin-top: 12px;
+  font-family: var(--font-mono); font-size: 10.5px; color: var(--sub);
+}
+
+.decision-meta span {
+  background: rgba(255,255,255,0.45); border: 1px solid rgba(21,32,27,0.08);
+  border-radius: 999px; padding: 4px 8px;
+}
+
+.audit-panel {
+  margin-top: 16px; border: 1px solid var(--line); border-radius: var(--radius-m);
+  background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 12px;
+}
+
+.audit-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.audit-entry {
+  border: 1px solid var(--line); border-radius: var(--radius-s); background: var(--paper); padding: 10px 12px;
+}
+
+.audit-header {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px;
+  font-size: 12px; color: var(--sub);
+}
+
+.audit-header strong {
+  color: var(--ink); font-size: 12.5px; text-transform: uppercase; letter-spacing: .04em;
+}
+
+.audit-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px 12px;
+}
+
+.audit-grid div {
+  display: flex; flex-direction: column; gap: 3px;
+  font-size: 11px; color: var(--sub);
+}
+
+.audit-grid b {
+  color: var(--ink); font-size: 12px; line-height: 1.4;
+}
+
 .error-banner {
   display: flex; gap: 12px; align-items: baseline; padding: 11px 14px; border-radius: var(--radius-m);
   background: #f1e2de; color: var(--danger-fg); font-size: 12px;

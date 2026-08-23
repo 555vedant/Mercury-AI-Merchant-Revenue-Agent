@@ -110,7 +110,8 @@ def negotiate(request: NegotiateRequest) -> dict[str, Any]:
         "features": list(FEATURES[merchant.sku]),
     }
     buyer = BuyerAgent(model, buyer_max_price=request.buyer_max_price)
-    seller = SellerAgent(model, merchant_data=merchant, policy_gate=policy_gate)
+    audit_trail = AuditTrail()
+    seller = SellerAgent(model, merchant_data=merchant, policy_gate=policy_gate, audit_trail=audit_trail)
     env = make(
         "basic-price-negotiation-v0",
         buyer_agent=buyer,
@@ -123,9 +124,38 @@ def negotiate(request: NegotiateRequest) -> dict[str, Any]:
     result = run_negotiation(env, buyer, seller, request.user_requirement, product_info)
     negotiation_id = str(uuid4())
     policy_result = _policy_for(result, merchant, policy_gate) if result["terminated"] else None
-    audit_trail = AuditTrail()
     if policy_result is not None:
-        audit_trail.record_policy_decision(policy_result)
+        audit_trail.record_policy_decision(
+            policy_result,
+            product=product_info.get("name") or merchant.sku,
+            agreed_price=result["info"].get("agreed_price"),
+            attempted_price=result["observation"].get("buyer_price") or result["observation"].get("seller_price"),
+            inventory=merchant.inventory_quantity,
+            margin=result["info"].get("seller_revenue", {}).get("margin_rate"),
+            discount=max(0.0, (merchant.list_price - (result["info"].get("agreed_price") or merchant.list_price)) / merchant.list_price) if merchant.list_price else 0.0,
+            amount=result["info"].get("agreed_price"),
+        )
+    if result["status"] == "agreed":
+        audit_trail.record_negotiation_event(
+            "AGREED",
+            "Offer accepted and the agreed price is within the merchant policy.",
+            product=product_info.get("name") or merchant.sku,
+            agreed_price=result["info"].get("agreed_price"),
+            attempted_price=result["observation"].get("buyer_price") or result["observation"].get("seller_price"),
+            inventory=merchant.inventory_quantity,
+            margin=result["info"].get("seller_revenue", {}).get("margin_rate"),
+            amount=result["info"].get("agreed_price"),
+        )
+    elif result["status"] == "timeout":
+        audit_trail.record_negotiation_event(
+            "TIMEOUT",
+            "Negotiation timed out without a valid agreement.",
+            product=product_info.get("name") or merchant.sku,
+            attempted_price=result["observation"].get("buyer_price") or result["observation"].get("seller_price"),
+            inventory=merchant.inventory_quantity,
+            margin=result["info"].get("seller_revenue", {}).get("margin_rate"),
+            amount=result["info"].get("agreed_price") or result["observation"].get("buyer_price") or result["observation"].get("seller_price"),
+        )
     negotiations[negotiation_id] = {
         "result": result,
         "merchant": merchant,
@@ -148,8 +178,25 @@ def create_payment(request: PaymentCreateRequest) -> dict[str, Any]:
     if policy_result.decision is not PolicyDecision.ALLOW:
         raise HTTPException(status_code=403, detail=policy_result.reason)
     try:
-        return create_razorpay_test_order(policy_result, receipt=request.receipt)
+        order = create_razorpay_test_order(policy_result, receipt=request.receipt)
+        negotiation["audit_trail"].record_payment_event(
+            "CREATED",
+            "Payment order created in Razorpay test mode after policy approval.",
+            product=negotiation["merchant"].sku,
+            agreed_price=policy_result.transaction_amount,
+            amount=policy_result.transaction_amount,
+            order_id=order.get("order_id"),
+            currency=order.get("currency"),
+        )
+        return order
     except (ValueError, RuntimeError) as error:
+        negotiation["audit_trail"].record_payment_event(
+            "FAILED",
+            f"Payment creation failed: {error}",
+            product=negotiation["merchant"].sku,
+            agreed_price=policy_result.transaction_amount,
+            amount=policy_result.transaction_amount,
+        )
         raise HTTPException(status_code=400, detail=str(error)) from error
 
 
