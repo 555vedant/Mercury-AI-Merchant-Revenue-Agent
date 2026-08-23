@@ -139,7 +139,7 @@
       "REJECT": 0.0
     },
     "[\"SMART-WATCH-005\",7,190,200,0.3,1]": {
-      "ACCEPT": 1.8305,
+      "ACCEPT": 4.4937,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
@@ -179,6 +179,144 @@
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": -0.72
+    },
+    "[\"WINTER-JACKET-001\",12,100,140,0.18,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,140,0.35,1]": {
+      "ACCEPT": 1.6066,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,100,130,0.16,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,130,0.35,1]": {
+      "ACCEPT": 1.5919,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,240,330,0.44,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,240,330,0.44,1]": {
+      "ACCEPT": 2.9769,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,220,0.14,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,220,0.32,1]": {
+      "ACCEPT": 1.9394,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,210,0.13,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,210,0.31,1]": {
+      "ACCEPT": 3.44062,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,210,0.12,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,200,0.1,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,110,150,-0.23,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,150,0.1,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,150,0.11,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,150,150,0.11,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,140,190,0.03,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,190,0.29,1]": {
+      "ACCEPT": 3.15798,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,130,180,0.0,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,180,0.19,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,180,0.28,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,180,0.28,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,140,190,0.02,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
     }
   },
   "metrics": {
@@ -189,10 +327,10 @@
       "accepted_price": 0.0
     },
     "after": {
-      "negotiations": 14,
-      "conversions": 8,
-      "profit": 116.16,
-      "accepted_price": 347.16
+      "negotiations": 26,
+      "conversions": 18,
+      "profit": 710.76,
+      "accepted_price": 2165.76
     }
   }
 }
