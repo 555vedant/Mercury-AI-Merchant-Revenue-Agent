@@ -163,6 +163,18 @@ function NegotiationLedger({ history }) {
   )
 }
 
+// function LearningMetrics({ metrics }) {
+//   if (!metrics) return null
+//   const formatRate = (value) => `${(Number(value || 0) * 100).toFixed(0)}%`
+//   const formatMoney = (value) => money(value)
+//   return (
+//     <section className="learning-metrics">
+//       <div className="learning-heading"><div><span className="trace-kicker">Merchant learning</span><h2>Before vs after</h2></div><span className="muted">Persistent Q-table</span></div>
+//       <div className="learning-grid"><div><span>Metric</span><strong>Before</strong><strong>After</strong></div><div><span>Conversion rate</span><b>{formatRate(metrics.before?.conversion_rate)}</b><b>{formatRate(metrics.after?.conversion_rate)}</b></div><div><span>Average profit</span><b>{formatMoney(metrics.before?.average_profit)}</b><b>{formatMoney(metrics.after?.average_profit)}</b></div><div><span>Average accepted price</span><b>{formatMoney(metrics.before?.average_accepted_price)}</b><b>{formatMoney(metrics.after?.average_accepted_price)}</b></div></div>
+//     </section>
+//   )
+// }
+
 /* ------------------------------------------------------------------ */
 /* Product drawer — browsing only. No negotiation lives here.          */
 /* ------------------------------------------------------------------ */
@@ -389,6 +401,8 @@ function NegotiationPage({ product, onBack, onDone }) {
           </div>
         </div>
       )}
+
+      {/* <LearningMetrics metrics={negotiation?.learning_metrics} /> */}
 
       {/* Accept & pay */}
       {negotiation && negotiation.status === 'agreed' && policy?.decision === 'ALLOW' && !payment?.order_id && (

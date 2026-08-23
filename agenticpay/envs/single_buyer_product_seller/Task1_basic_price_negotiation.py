@@ -21,7 +21,7 @@ class Task1BasicPriceNegotiation(BaseEnv):
         self.state, self.negotiation_info, self.current_round = NegotiationState(), NegotiationInfo(), 0
         product_info = product_info or {}
         self.buyer_agent.initialize({"user_requirement": user_requirement, "product_info": product_info, "max_price": self.buyer_max_price, "user_profile": user_profile, "environment_info": self.environment_info})
-        self.seller_agent.initialize({"product_info": product_info, "min_price": self.seller_min_price, "initial_price": self.initial_seller_price, "environment_info": self.environment_info})
+        self.seller_agent.initialize({"product_info": product_info, "min_price": self.seller_min_price, "initial_price": self.initial_seller_price, "max_price": self.buyer_max_price, "environment_info": self.environment_info})
         return self._observation(), self._info()
 
     def step(self, buyer_action: Optional[str] = None, seller_action: Optional[str] = None) -> Tuple[Dict[str, Any], float, bool, bool, Dict[str, Any]]:
@@ -29,15 +29,32 @@ class Task1BasicPriceNegotiation(BaseEnv):
             raise RuntimeError("Negotiation has finished. Call reset() before stepping again.")
         if buyer_action:
             self.memory.add_message("buyer", buyer_action, self.current_round + 1)
-            self.state.buyer_price = self._price(buyer_action, "BUYER")
+            buyer_price = self._price(buyer_action, "BUYER")
+            if buyer_price is not None:
+                self.state.buyer_price = buyer_price
         if seller_action:
             self.memory.add_message("seller", seller_action, self.current_round + 1)
-            self.state.seller_price = self._price(seller_action, "SELLER")
+            seller_price = self._price(seller_action, "SELLER")
+            if seller_price is not None:
+                self.state.seller_price = seller_price
         self.current_round += 1
         self.state.round = self.current_round
-        agreed = self.state.buyer_price is not None and self.state.seller_price is not None and self.state.seller_price <= self.state.buyer_price + self.price_tolerance
+        seller_action_type = self._action(seller_action or "")
+        rejected = seller_action_type == "REJECT"
+        explicit_counter = seller_action_type in {"SMALL_COUNTER", "TARGET_COUNTER"}
+        current_seller_offer = seller_price if seller_action else None
+        seller_floor = getattr(getattr(self.seller_agent, "revenue_engine", None), "minimum_viable_price", None)
+        if seller_floor is None:
+            seller_floor = self.seller_min_price
+        agreed_price = (current_seller_offer if current_seller_offer is not None and buyer_price is not None and current_seller_offer <= buyer_price
+                        else (buyer_price + current_seller_offer) / 2 if current_seller_offer is not None and buyer_price is not None else None)
+        agreed = (seller_action_type == "ACCEPT" and not rejected and not explicit_counter
+                  and current_seller_offer is not None and buyer_price is not None and agreed_price is not None
+                  and (seller_floor is None or current_seller_offer >= seller_floor)
+                  and getattr(self.seller_agent, "is_offer_allowed", lambda price: True)(agreed_price)
+                  and current_seller_offer <= buyer_price + self.price_tolerance)
         if agreed:
-            self.state.agreed_price = self.state.seller_price if self.state.seller_price <= self.state.buyer_price else (self.state.buyer_price + self.state.seller_price) / 2
+            self.state.agreed_price = agreed_price
             self.negotiation_info.status = NegotiationStatus.AGREED
         elif self.current_round >= self.max_rounds:
             self.negotiation_info.status = NegotiationStatus.TIMEOUT
@@ -53,6 +70,11 @@ class Task1BasicPriceNegotiation(BaseEnv):
     def _price(message: str, role: str) -> Optional[float]:
         match = re.search(rf"###\s*{role}_PRICE\(\$?\s*([0-9]+(?:\.[0-9]+)?)\s*\)\s*###", message, re.IGNORECASE)
         return float(match.group(1)) if match else None
+
+    @staticmethod
+    def _action(message: str) -> Optional[str]:
+        match = re.search(r"###\s*SELLER_ACTION\((ACCEPT|SMALL_COUNTER|TARGET_COUNTER|REJECT)\)\s*###", message, re.IGNORECASE)
+        return match.group(1).upper() if match else None
 
     def _observation(self) -> Dict[str, Any]:
         return {"conversation_history": self.memory.get_history(), "current_round": self.current_round, "buyer_price": self.state.buyer_price, "seller_price": self.state.seller_price, "status": self.negotiation_info.status.value}

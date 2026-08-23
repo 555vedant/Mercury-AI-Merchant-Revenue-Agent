@@ -27,6 +27,7 @@ from agenticpay import (
     product_name,
 )
 from agenticpay.catalog import FEATURES
+from agenticpay.merchant_policy import MerchantPolicy
 from agenticpay.negotiation_runner import run_negotiation
 
 app = FastAPI(title="Mercury API")
@@ -75,6 +76,7 @@ def _negotiation_response(negotiation_id: str, record: dict[str, Any]) -> dict[s
         "revenue": result["info"].get("seller_revenue", {}),
         "policy": policy_result.to_dict() if policy_result else None,
         "audit_trail": record["audit_trail"].as_dicts(),
+        "learning_metrics": MerchantPolicy().metric_summary(),
         "conversation_history": result["observation"]["conversation_history"],
     }
 
@@ -108,7 +110,7 @@ def negotiate(request: NegotiateRequest) -> dict[str, Any]:
         "features": list(FEATURES[merchant.sku]),
     }
     buyer = BuyerAgent(model, buyer_max_price=request.buyer_max_price)
-    seller = SellerAgent(model, merchant_data=merchant)
+    seller = SellerAgent(model, merchant_data=merchant, policy_gate=policy_gate)
     env = make(
         "basic-price-negotiation-v0",
         buyer_agent=buyer,

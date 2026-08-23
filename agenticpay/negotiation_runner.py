@@ -20,6 +20,12 @@ def run_negotiation(
         seller_action = seller_agent.respond(seller_history, observation)
         observation, reward, terminated, truncated, info = env.step(buyer_action, seller_action)
         if terminated or truncated:
+            if hasattr(seller_agent, "finish_episode"):
+                seller_agent.finish_episode(
+                    converted=terminated,
+                    profit=float(info.get("seller_revenue", {}).get("profit", 0.0)),
+                    margin=float(info.get("seller_revenue", {}).get("margin_rate", 0.0)),
+                )
             return {
                 "observation": observation,
                 "reward": reward,

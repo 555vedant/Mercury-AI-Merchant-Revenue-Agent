@@ -370,6 +370,17 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(31, 77, 63, 0.2
 
 .page-offer-summary { margin: 0; }
 
+.learning-metrics { border: 1px solid var(--line); border-radius: var(--radius-l); background: var(--surface); padding: 18px 20px; }
+.learning-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.learning-heading h2 { margin-top: 5px; font: 600 17px var(--font-display); letter-spacing: -.2px; }
+.learning-grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); border-top: 1px solid var(--line); }
+.learning-grid > div { display: grid; gap: 8px; padding: 11px 10px 2px 0; min-width: 0; }
+.learning-grid > div:not(:first-child) { padding-left: 12px; border-left: 1px solid var(--line); }
+.learning-grid span { color: var(--muted); font: 9px var(--font-mono); letter-spacing: .04em; text-transform: uppercase; }
+.learning-grid strong, .learning-grid b { font-size: 12px; font-weight: 600; }
+.learning-grid strong { color: var(--sub); }
+.learning-grid b:last-child { color: var(--brand); }
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .drawer, .drawer-overlay, .product-card, .product-card-media img, .button-spinner, .decision, .order-confirmation, .loading-dot, .ellipsis::after {
@@ -391,4 +402,6 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(31, 77, 63, 0.2
   .offer-recap { flex-wrap: wrap; }
   .offer-recap-price { text-align: left; }
   .conversation-card { padding: 18px; }
+  .learning-metrics { padding: 16px; overflow-x: auto; }
+  .learning-grid { min-width: 520px; }
 }

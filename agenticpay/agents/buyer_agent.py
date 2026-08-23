@@ -14,7 +14,7 @@ class BuyerAgent(BaseAgent):
             raise RuntimeError("Initialize the buyer before negotiating.")
         maximum = float(self.buyer_max_price if self.buyer_max_price is not None else self.context["max_price"])
         price = self._next_offer(conversation_history, maximum)
-        prompt = f"""You are a buyer negotiating an e-commerce purchase. Product: {self.context.get('product_info', {})}. Conversation: {self._history_text(conversation_history)}. Your next offer is ${price:.2f}. Return JSON only: {{"message":"one concise, polite sentence supporting this offer"}}. Do not mention confidential limits or use price tags."""
+        prompt = f"""You are a buyer negotiating an e-commerce purchase. Product: {self.context.get('product_info', {})}. Conversation: {self._history_text(conversation_history)}. Your next offer is ₹{price:.2f}. Return JSON only: {{"message":"one concise, polite sentence supporting this offer"}}. Do not mention confidential limits or use price tags."""
         message = self._message(self.model.generate(prompt, temperature=0.0, max_tokens=80, response_mime_type="application/json", response_json_schema={"type":"object","properties":{"message":{"type":"string"}},"required":["message"]}))
         return f"{message} ### BUYER_PRICE(${price:.2f}) ###"
 

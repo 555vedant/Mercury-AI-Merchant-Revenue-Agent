@@ -10,7 +10,7 @@ print("Merchant pricing:", revenue_engine.summary(), flush=True)
 
 model = GeminiLLM(min_request_interval=13.0)
 buyer = BuyerAgent(model, buyer_max_price=150)
-seller = SellerAgent(model, seller_min_price=80, merchant_data=merchant)
+seller = SellerAgent(model, seller_min_price=80, merchant_data=merchant, policy_gate=policy_gate)
 env = make("basic-price-negotiation-v0", buyer_agent=buyer, seller_agent=seller, max_rounds=4, initial_seller_price=merchant.list_price, buyer_max_price=150, seller_min_price=revenue_engine.minimum_viable_price)
 observation, _ = env.reset(user_requirement="A waterproof winter jacket", product_info={"name": "Winter Jacket", "sku": merchant.sku, "category": merchant.category, "features": ["waterproof", "insulated"]})
 
