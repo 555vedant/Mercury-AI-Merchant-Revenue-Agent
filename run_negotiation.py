@@ -1,4 +1,6 @@
-﻿from agenticpay import AuditTrail, BuyerAgent, GeminiLLM, MerchantData, PolicyConfig, PolicyContext, PolicyGate, RevenueEngine, SellerAgent, make
+﻿import os
+
+from agenticpay import AuditTrail, BuyerAgent, GeminiLLM, MerchantData, PolicyConfig, PolicyContext, PolicyGate, RevenueEngine, SellerAgent, create_razorpay_test_order, make
 
 merchant = MerchantData(sku="WINTER-JACKET-001", list_price=140.00, unit_cost=68.00, fulfillment_cost=8.00, marketing_cost=4.00, minimum_margin_rate=0.20, category="apparel", inventory_quantity=12)
 revenue_engine = RevenueEngine(merchant)
@@ -28,4 +30,6 @@ while True:
             policy_result = policy_gate.evaluate(PolicyContext(agreed_price=info["agreed_price"], quantity=1, category=merchant.category, merchant=merchant))
             audit_trail.record_policy_decision(policy_result)
             print("Policy decision:", policy_result.to_dict(), flush=True)
+            if policy_result.is_allowed and os.getenv("CREATE_RAZORPAY_TEST_ORDER", "false").lower() == "true":
+                print("Razorpay Test Mode order:", create_razorpay_test_order(policy_result), flush=True)
         break
