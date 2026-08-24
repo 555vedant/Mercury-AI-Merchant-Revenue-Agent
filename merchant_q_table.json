@@ -649,7 +649,7 @@
       "REJECT": 0.0
     },
     "[\"WINTER-JACKET-001\",12,100,140,0.21,0]": {
-      "ACCEPT": 0.0,
+      "ACCEPT": 1.84014,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
@@ -689,6 +689,48 @@
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,220,0.25,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,220,0.3,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,210,220,0.36,3]": {
+      "ACCEPT": 4.06566,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,220,0.16,0,630]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,170,220,0.23,1,630]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,220,0.28,2,630]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,200,220,0.33,3,630]": {
+      "ACCEPT": 2.0535,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
     }
   },
   "metrics": {
@@ -699,10 +741,10 @@
       "accepted_price": 0.0
     },
     "after": {
-      "negotiations": 44,
-      "conversions": 34,
-      "profit": 1709.7,
-      "accepted_price": 5157.7
+      "negotiations": 49,
+      "conversions": 39,
+      "profit": 1967.22,
+      "accepted_price": 5974.22
     }
   }
 }

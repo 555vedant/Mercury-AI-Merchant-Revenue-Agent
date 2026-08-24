@@ -485,11 +485,27 @@ function NegotiationPage({ product, onBack, onDone }) {
   const [cvoEnabled, setCvoEnabled] = useState(
     () => localStorage.getItem('mercury_cvo') === 'true'
   )
+  // Auto-pay flag: when ON, we skip the manual "Accept & pay" button and
+  // fire createPayment() automatically the moment the negotiation comes
+  // back AGREED + policy-approved. When OFF, behavior is unchanged from
+  // before (manual button). The toggle for this now lives in a settings
+  // panel that stays visible for the whole page (not just pre-offer), so
+  // it can always be found and flipped.
+  const [autoPayEnabled, setAutoPayEnabled] = useState(
+    () => localStorage.getItem('mercury_autopay') === 'true'
+  )
   const ledgerEndRef = useRef(null)
+  // Guards against double-firing auto-pay for the same negotiation
+  // (effects can re-run on unrelated re-renders).
+  const autoPayFiredForRef = useRef(null)
 
   useEffect(() => {
     localStorage.setItem('mercury_cvo', cvoEnabled)
   }, [cvoEnabled])
+
+  useEffect(() => {
+    localStorage.setItem('mercury_autopay', autoPayEnabled)
+  }, [autoPayEnabled])
 
   const image = getGallery(product)[0]
   const stock = stockInfo(product.inventory_quantity)
@@ -514,6 +530,7 @@ function NegotiationPage({ product, onBack, onDone }) {
     setError('')
     setPayment(null)
     setNegotiation(null)
+    autoPayFiredForRef.current = null
 
     try {
       const data = await negotiateRequest({
@@ -547,10 +564,31 @@ function NegotiationPage({ product, onBack, onDone }) {
     }
   }
 
+  // Fires createPayment() automatically as soon as we have an AGREED
+  // negotiation that also passed the fixed approval policy — but only
+  // when the merchant has autoPayEnabled turned on. Runs once per
+  // negotiation_id, and only if a payment hasn't already been kicked off.
+  // The order-confirmation / payment slip below renders automatically
+  // for BOTH the autopay and manual paths, as soon as payment.order_id
+  // exists.
+  useEffect(() => {
+    if (!autoPayEnabled) return
+    if (!negotiation) return
+    if (negotiation.status !== 'agreed') return
+    if (policy?.decision !== 'ALLOW') return
+    if (payment) return
+    if (autoPayFiredForRef.current === negotiation.negotiation_id) return
+
+    autoPayFiredForRef.current = negotiation.negotiation_id
+    createPayment()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoPayEnabled, negotiation, policy, payment])
+
   function resetOffer() {
     setNegotiation(null)
     setPayment(null)
     setError('')
+    autoPayFiredForRef.current = null
   }
 
   return (
@@ -587,35 +625,135 @@ function NegotiationPage({ product, onBack, onDone }) {
         </div>
       )}
 
-      {!started && !negotiation && (
-        <>
-          <div className="offer-form page-offer-form" style={{ marginBottom: '1.5rem', background: 'var(--surface-sunken)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem' }}>
-            <div className="offer-form-heading" style={{ margin: 0 }}>
-              <h3>Merchant Settings</h3>
+      <section
+        aria-label="Merchant Settings"
+        style={{
+          width: '100%',
+          background: '#ffffff',
+          border: '1px solid #e3e1d7',
+          borderRadius: '10px',
+          padding: '22px',
+          marginBottom: '20px',
+          color: '#15201b',
+        }}
+      >
+        <h3
+          style={{
+            margin: '0 0 20px',
+            fontFamily: 'Space Grotesk, Inter, sans-serif',
+            fontSize: '18px',
+            fontWeight: 600,
+          }}
+        >
+          Merchant Settings
+        </h3>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '20px',
+            padding: '4px 0',
+          }}
+        >
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ fontSize: '15px', fontWeight: 600 }}>
+              Customer Value Optimization
             </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.5rem' }}>
-              <div>
-                <strong>Customer Value Optimization</strong>
-                <p style={{ margin: '0.5rem 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-                  {cvoEnabled 
-                    ? 'ON → Merchant Agent considers customer history/CLV.' 
-                    : 'OFF → Merchant Agent treats the customer normally.'}
-                </p>
-              </div>
-              <button
-                type="button"
-                className="secondary-button"
-                style={{ minWidth: '80px' }}
-                onClick={() => setCvoEnabled(!cvoEnabled)}
-              >
-                {cvoEnabled ? 'ON' : 'OFF'}
-              </button>
+            <div
+              style={{
+                marginTop: '6px',
+                fontSize: '12px',
+                lineHeight: 1.5,
+                color: '#5f6b62',
+              }}
+            >
+              {cvoEnabled
+                ? 'ON → Merchant Agent considers customer history/CLV.'
+                : 'OFF → Merchant Agent treats the customer normally.'}
             </div>
           </div>
 
-          <form className="offer-form page-offer-form" onSubmit={negotiate}>
-            <div className="offer-form-heading">
+          <button
+            type="button"
+            onClick={() => setCvoEnabled((value) => !value)}
+            aria-pressed={cvoEnabled}
+            aria-label="Toggle Customer Value Optimization"
+            style={{
+              flex: '0 0 auto',
+              width: '74px',
+              height: '36px',
+              borderRadius: '999px',
+              border: '1px solid #c6c8bf',
+              background: cvoEnabled ? '#101d17' : '#d8d9d1',
+              color: cvoEnabled ? '#ffffff' : '#30362f',
+              fontFamily: 'DM Mono, monospace',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            {cvoEnabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '20px',
+            padding: '18px 0 4px',
+            marginTop: '18px',
+            borderTop: '1px solid #e3e1d7',
+          }}
+        >
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ fontSize: '15px', fontWeight: 600 }}>
+              Autopay after agreement
+            </div>
+            <div
+              style={{
+                marginTop: '6px',
+                fontSize: '12px',
+                lineHeight: 1.5,
+                color: '#5f6b62',
+              }}
+            >
+              {autoPayEnabled
+                ? 'ON → Automatically create the Razorpay Test Mode order after an approved agreement.'
+                : 'OFF → Show the manual Accept & pay button after an approved agreement.'}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setAutoPayEnabled((value) => !value)}
+            aria-pressed={autoPayEnabled}
+            aria-label="Toggle Autopay after agreement"
+            style={{
+              flex: '0 0 auto',
+              width: '74px',
+              height: '36px',
+              borderRadius: '999px',
+              border: '1px solid #c6c8bf',
+              background: autoPayEnabled ? '#101d17' : '#d8d9d1',
+              color: autoPayEnabled ? '#ffffff' : '#30362f',
+              fontFamily: 'DM Mono, monospace',
+              fontSize: '11px',
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            {autoPayEnabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      </section>
+
+      {!started && !negotiation && (
+        <form className="offer-form page-offer-form" onSubmit={negotiate}>
+          <div className="offer-form-heading">
             <h3>Your offer</h3>
             <p>
               Tell the seller what you're looking for and the most
@@ -652,7 +790,6 @@ function NegotiationPage({ product, onBack, onDone }) {
             {loading ? 'Sending offer' : 'Send offer'} <span>→</span>
           </button>
         </form>
-        </>
       )}
 
       {started && (
@@ -779,10 +916,32 @@ function NegotiationPage({ product, onBack, onDone }) {
         </section>
       )}
 
+      {/* Auto-pay in progress indicator — shown only when autoPayEnabled
+          is ON, since in that case the manual button below is hidden. */}
+      {autoPayEnabled &&
+        negotiation &&
+        negotiation.status === 'agreed' &&
+        policy?.decision === 'ALLOW' &&
+        payment?.status === 'creating' &&
+        !payment?.order_id && (
+          <div className="conversation-loading">
+            <span className="loading-dot" />
+            <p>
+              Autopay is on — creating your order for{' '}
+              {money(revenue.revenue ?? negotiation.agreed_price)}
+              <span className="ellipsis" />
+            </p>
+          </div>
+        )}
+
+      {/* Manual "Accept & pay" button — only shown when autoPayEnabled is
+          OFF and the negotiation is AGREED + policy-approved. When
+          autopay is ON, payment is triggered automatically above. */}
       {negotiation &&
         negotiation.status === 'agreed' &&
         policy?.decision === 'ALLOW' &&
-        !payment?.order_id && (
+        !payment?.order_id &&
+        !autoPayEnabled && (
           <button
             type="button"
             className="payment-button"
@@ -805,6 +964,9 @@ function NegotiationPage({ product, onBack, onDone }) {
           </button>
         )}
 
+      {/* Payment slip — renders automatically for BOTH paths as soon as
+          payment.order_id exists: instantly after autopay fires, or
+          right after the merchant clicks "Accept & pay" manually. */}
       {payment?.order_id && (
         <div className="order-confirmation">
           <span className="order-confirmation-mark">
