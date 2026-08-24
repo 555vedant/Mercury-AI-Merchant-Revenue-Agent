@@ -453,6 +453,114 @@ button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(31, 77, 63, 0.2
 .learning-grid strong { color: var(--sub); }
 .learning-grid b:last-child { color: var(--brand); }
 
+/* ---------- Merchant settings toggles ---------- */
+.page-offer-form[style] .secondary-button {
+  width: 58px !important;
+  min-width: 58px !important;
+  height: 32px;
+  padding: 0 10px !important;
+  margin-top: 0 !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 999px !important;
+  background: var(--brand-dark) !important;
+  color: #f4f6f1 !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1;
+  flex: 0 0 auto;
+  transition: background-color .18s var(--ease), border-color .18s var(--ease), transform .15s var(--ease), box-shadow .18s var(--ease);
+}
+
+.page-offer-form[style] .secondary-button:hover {
+  background: var(--brand) !important;
+  border-color: var(--brand) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(16, 29, 23, 0.16);
+}
+
+.page-offer-form[style] .secondary-button:active { transform: translateY(0); }
+
+.page-offer-form[style] .secondary-button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(31, 77, 63, 0.18), 0 5px 12px rgba(16, 29, 23, 0.12);
+}
+
+.page-offer-form[style] {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-l) !important;
+}
+
+/* ---------- Settings Toggle Switches ---------- */
+.settings-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 58px;
+  height: 32px;
+  padding: 4px;
+  background-color: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform .15s var(--ease);
+  outline: none;
+  flex: 0 0 auto;
+  border: none;
+}
+
+.settings-toggle:hover {
+  transform: translateY(-1px);
+}
+
+.settings-toggle.active {
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
+}
+
+.settings-toggle-thumb {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.settings-toggle.active .settings-toggle-thumb {
+  transform: translateX(26px);
+}
+
+.settings-toggle-label {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .02em;
+}
+
+.settings-toggle:not(.active) .settings-toggle-label {
+  right: 10px;
+  color: var(--sub);
+}
+
+.settings-toggle.active .settings-toggle-label {
+  left: 10px;
+  color: #fff;
+}
+
+@media (max-width: 560px) {
+  .page-offer-form[style] > div { gap: 16px; }
+  .page-offer-form[style] .secondary-button { width: 56px !important; min-width: 56px !important; }
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .drawer, .drawer-overlay, .product-card, .product-card-media img, .button-spinner, .decision, .order-confirmation, .loading-dot, .ellipsis::after {

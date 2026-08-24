@@ -1,4 +1,4 @@
-﻿"""Single buyer and seller price-negotiation environment."""
+"""Single buyer and seller price-negotiation environment."""
 import re
 from typing import Any, Dict, Optional, Tuple
 from agenticpay.core import BaseEnv, NegotiationInfo, NegotiationStatus
@@ -40,19 +40,20 @@ class Task1BasicPriceNegotiation(BaseEnv):
         self.current_round += 1
         self.state.round = self.current_round
         seller_action_type = self._action(seller_action or "")
-        rejected = seller_action_type == "REJECT"
-        explicit_counter = seller_action_type in {"SMALL_COUNTER", "TARGET_COUNTER"}
-        current_seller_offer = seller_price if seller_action else None
-        seller_floor = getattr(getattr(self.seller_agent, "revenue_engine", None), "minimum_viable_price", None)
-        if seller_floor is None:
-            seller_floor = self.seller_min_price
-        agreed_price = (current_seller_offer if current_seller_offer is not None and buyer_price is not None and current_seller_offer <= buyer_price
-                        else (buyer_price + current_seller_offer) / 2 if current_seller_offer is not None and buyer_price is not None else None)
-        agreed = (seller_action_type == "ACCEPT" and not rejected and not explicit_counter
-                  and current_seller_offer is not None and buyer_price is not None and agreed_price is not None
-                  and (seller_floor is None or current_seller_offer >= seller_floor)
-                  and getattr(self.seller_agent, "is_offer_allowed", lambda price: True)(agreed_price)
-                  and current_seller_offer <= buyer_price + self.price_tolerance)
+        buyer_action_type = self._buyer_action(buyer_action or "")
+        
+        agreed_price = None
+        if seller_action_type == "ACCEPT":
+            agreed_price = buyer_price
+        elif buyer_action_type == "ACCEPT":
+            agreed_price = seller_price
+
+        agreed = False
+        if (seller_action_type == "ACCEPT" or buyer_action_type == "ACCEPT") and agreed_price is not None:
+            is_allowed = getattr(self.seller_agent, "is_offer_allowed", lambda price: True)(agreed_price)
+            if is_allowed:
+                agreed = True
+
         if agreed:
             self.state.agreed_price = agreed_price
             self.negotiation_info.status = NegotiationStatus.AGREED
@@ -74,6 +75,11 @@ class Task1BasicPriceNegotiation(BaseEnv):
     @staticmethod
     def _action(message: str) -> Optional[str]:
         match = re.search(r"###\s*SELLER_ACTION\((ACCEPT|SMALL_COUNTER|TARGET_COUNTER|REJECT)\)\s*###", message, re.IGNORECASE)
+        return match.group(1).upper() if match else None
+
+    @staticmethod
+    def _buyer_action(message: str) -> Optional[str]:
+        match = re.search(r"###\s*BUYER_ACTION\((ACCEPT|COUNTER)\)\s*###", message, re.IGNORECASE)
         return match.group(1).upper() if match else None
 
     def _observation(self) -> Dict[str, Any]:

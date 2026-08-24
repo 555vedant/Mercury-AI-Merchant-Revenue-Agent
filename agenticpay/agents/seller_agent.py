@@ -11,7 +11,7 @@ from agenticpay.merchant_policy import MerchantPolicy, reward_for_episode
 from agenticpay.policy_gate import PolicyConfig, PolicyContext, PolicyGate
 
 class SellerAgent(BaseAgent):
-    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None, audit_trail: Optional[AuditTrail] = None, clv_score: float = 0.0):
+    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None, audit_trail: Optional[AuditTrail] = None, clv_score: Optional[float] = None, cvo_threshold: float = 50.0, cvo_max_concession_rate: float = 0.05):
         super().__init__(model, role_description, name)
         self.seller_min_price = seller_min_price
         self.revenue_engine = RevenueEngine(merchant_data) if merchant_data else None
@@ -24,6 +24,8 @@ class SellerAgent(BaseAgent):
         self.learned_at_start = False
         self.audit_trail = audit_trail
         self.clv_score = clv_score
+        self.cvo_threshold = cvo_threshold
+        self.cvo_max_concession_rate = cvo_max_concession_rate
 
     def _record_decision(self, action: str, *, reason: str, offer_price: Optional[float], attempted_price: Optional[float], failed_rule: Optional[str] = None) -> None:
         if not self.audit_trail:
@@ -52,28 +54,54 @@ class SellerAgent(BaseAgent):
         if not self.initialized:
             raise RuntimeError("Initialize the seller before negotiating.")
         floor = self.revenue_engine.minimum_viable_price if self.revenue_engine else float(self.seller_min_price if self.seller_min_price is not None else self.context["min_price"])
-        target = self.revenue_engine.target_price if self.revenue_engine else float(self.context.get("initial_price", floor * 1.25))
+        original_target = self.revenue_engine.target_price if self.revenue_engine else float(self.context.get("initial_price", floor * 1.25))
+        
+        target = original_target
+        cvo_concession_applied = False
+        if self.clv_score is not None and self.clv_score >= self.cvo_threshold:
+            target = max(floor, original_target * (1.0 - self.cvo_max_concession_rate))
+            if target < original_target:
+                cvo_concession_applied = True
+
         buyer_price = self._latest_buyer_price(conversation_history)
         previous_seller_price = self._latest_seller_price(conversation_history)
         buyer_profitability = self.revenue_engine.evaluate(buyer_price) if self.revenue_engine and buyer_price is not None else None
         buyer_is_safe = buyer_price is not None and buyer_price >= floor and (buyer_profitability is None or buyer_profitability["profit"] > 0)
-        repeated_offer = buyer_price is not None and previous_seller_price is not None and abs(buyer_price - previous_seller_price) <= 0.01
+        
+        tolerance = 0.01
+        repeated_offer = buyer_price is not None and previous_seller_price is not None and abs(buyer_price - previous_seller_price) <= tolerance
+        matches_previous_seller = buyer_price is not None and previous_seller_price is not None and (buyer_price >= previous_seller_price - tolerance)
+
         near_target = buyer_price is not None and buyer_price >= target - 2.0
         buyer_maximum = float(self.context.get("max_price") or target)
         current_margin = buyer_profitability["margin_rate"] if buyer_profitability else 0.0
         self.learned_at_start = self.merchant_policy.has_learning if self.merchant_policy else False
+        
         state = None
         if self.merchant_policy and self.revenue_engine:
             state = self.merchant_policy.state_key(self.revenue_engine.merchant.sku, self.revenue_engine.merchant.inventory_quantity, buyer_price, buyer_maximum, current_margin, int(current_state.get("current_round", 0)), self.clv_score)
-        if repeated_offer and buyer_is_safe:
-            # The latest seller offer is the authoritative agreement anchor.
+        
+        # Determine the action without CVO for trace comparison
+        no_cvo_state = None
+        no_cvo_action = "TARGET_COUNTER"
+        if self.merchant_policy and self.revenue_engine:
+            no_cvo_state = self.merchant_policy.state_key(self.revenue_engine.merchant.sku, self.revenue_engine.merchant.inventory_quantity, buyer_price, buyer_maximum, current_margin, int(current_state.get("current_round", 0)), None)
+            if matches_previous_seller and buyer_is_safe:
+                no_cvo_action = "ACCEPT"
+            else:
+                no_cvo_action = self.merchant_policy.select_action(no_cvo_state)
+        else:
+            no_cvo_action = "ACCEPT" if buyer_is_safe and (matches_previous_seller or (buyer_price is not None and buyer_price >= original_target - 2.0)) else "TARGET_COUNTER"
+
+        # Actual action selection (using CVO-enabled state if CVO is ON)
+        if matches_previous_seller and buyer_is_safe:
             self.last_action = "ACCEPT"
             self.last_state = state
         elif self.merchant_policy and self.revenue_engine:
             self.last_state = state
             self.last_action = self.merchant_policy.select_action(self.last_state)
         else:
-            self.last_action = "ACCEPT" if buyer_is_safe and (repeated_offer or buyer_price is not None and buyer_price >= target - 2.0) else "TARGET_COUNTER"
+            self.last_action = "ACCEPT" if buyer_is_safe and (matches_previous_seller or (buyer_price is not None and buyer_price >= target - 2.0)) else "TARGET_COUNTER"
         if self.last_action == "ACCEPT" and buyer_is_safe:
             price = buyer_price
         elif self.last_action == "ACCEPT":
@@ -86,12 +114,41 @@ class SellerAgent(BaseAgent):
         else:
             price = self._counteroffer(buyer_price, floor, target)
         price = max(floor, round(price, 2))
-        if buyer_price is not None and self.last_action != "REJECT" and price <= buyer_price + 1.0:
+        
+        # Seller tolerance acceptance (matches current/previous offer within 0.01 tolerance)
+        if buyer_price is not None and self.last_action != "REJECT" and matches_previous_seller and buyer_is_safe:
             self.last_action = "ACCEPT"
+            price = buyer_price
+
+        # Explicit constraint check: never accept if the offer is not allowed
         if self.last_action == "ACCEPT" and (buyer_price is None or not self.is_offer_allowed(price)):
-            self.last_action = "REJECT" if not self.is_offer_allowed(price) else "TARGET_COUNTER"
+            self.last_action = "REJECT" if (price is not None and not self.is_offer_allowed(price)) else "TARGET_COUNTER"
         if self.last_action == "TARGET_COUNTER" and not self.is_offer_allowed(price):
             self.last_action = "REJECT"
+            
+        # Calculate CVO trace details: did CVO change the outcome?
+        cvo_trace = ""
+        if self.clv_score is not None:
+            # Calculate price without CVO for trace comparison
+            if no_cvo_action == "ACCEPT" and buyer_is_safe:
+                no_cvo_price = buyer_price
+            elif no_cvo_action == "ACCEPT":
+                no_cvo_price = self._counteroffer(buyer_price, floor, original_target)
+            elif no_cvo_action == "SMALL_COUNTER" and buyer_price is not None:
+                no_cvo_price = max(floor, min(original_target, buyer_price + 2.0))
+            elif no_cvo_action == "REJECT":
+                no_cvo_price = max(floor, original_target, (buyer_price + 2.0) if buyer_price is not None else original_target)
+            else:
+                no_cvo_price = self._counteroffer(buyer_price, floor, original_target)
+            no_cvo_price = max(floor, round(no_cvo_price, 2))
+
+            if no_cvo_action == "ACCEPT" and (buyer_price is None or not self.is_offer_allowed(no_cvo_price)):
+                no_cvo_action = "REJECT" if (no_cvo_price is not None and not self.is_offer_allowed(no_cvo_price)) else "TARGET_COUNTER"
+            if no_cvo_action == "TARGET_COUNTER" and not self.is_offer_allowed(no_cvo_price):
+                no_cvo_action = "REJECT"
+
+            if no_cvo_action != self.last_action or no_cvo_price != price:
+                cvo_trace = f" [CVO Trace: Action changed from {no_cvo_action} to {self.last_action}, Offer changed from ₹{no_cvo_price:.2f} to ₹{price:.2f}]"
         reason = "The seller chose a pricing strategy aligned with merchant guardrails."
         failed_rule = None
         if self.last_action == "REJECT":
@@ -105,6 +162,10 @@ class SellerAgent(BaseAgent):
             reason = "The seller accepted the buyer's offer because it satisfies policy and profitability rules."
         elif self.last_action in {"SMALL_COUNTER", "TARGET_COUNTER"}:
             reason = "The seller countered with a price that respects margin and discount guardrails."
+        
+        if cvo_trace:
+            reason += cvo_trace
+
         self._record_decision(self.last_action, reason=reason, offer_price=price, attempted_price=buyer_price, failed_rule=failed_rule)
         self.last_offer = price
         self.last_decision = self.revenue_engine.evaluate(price) if self.revenue_engine else {"revenue": price, "cost": 0.0, "profit": price, "margin_rate": 1.0}

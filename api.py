@@ -257,7 +257,7 @@ def negotiate(
 
     create_customer(customer_id)
 
-    clv_score = 0.0
+    clv_score = None
     if request.cvo_enabled:
         customer = get_customer(customer_id)
         if customer:
