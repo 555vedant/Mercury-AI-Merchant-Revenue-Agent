@@ -317,6 +317,48 @@
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,130,190,0.01,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,190,0.17,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,170,190,0.24,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,190,0.28,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,170,210,0.23,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,190,210,0.29,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,210,210,0.36,3]": {
+      "ACCEPT": 2.2329,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
     }
   },
   "metrics": {
@@ -327,10 +369,10 @@
       "accepted_price": 0.0
     },
     "after": {
-      "negotiations": 26,
-      "conversions": 18,
-      "profit": 710.76,
-      "accepted_price": 2165.76
+      "negotiations": 28,
+      "conversions": 19,
+      "profit": 784.56,
+      "accepted_price": 2372.56
     }
   }
 }

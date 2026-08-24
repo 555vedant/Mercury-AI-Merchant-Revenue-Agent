@@ -1,4 +1,4 @@
-﻿"""Buyer negotiation agent."""
+"""Buyer negotiation agent."""
 import json
 from typing import Any, Dict, List, Optional
 from agenticpay.agents.base_agent import BaseAgent
@@ -25,9 +25,24 @@ class BuyerAgent(BaseAgent):
             return round(maximum * 0.72, 2)
         if seller_price is None:
             return previous_buyer
-        if seller_price <= maximum:
+
+        if seller_price <= previous_buyer:
             return round(seller_price, 2)
-        return round(min(maximum, previous_buyer + 0.60 * (seller_price - previous_buyer)), 2)
+
+        import re
+        buyer_offer_count = sum(
+            1 for msg in history 
+            if msg.get("role") == "buyer" and re.search(r"BUYER_PRICE\(\$?\s*[0-9]+", msg.get("content", ""), re.IGNORECASE)
+        )
+
+        if seller_price <= maximum:
+            if seller_price <= previous_buyer * 1.05 or buyer_offer_count >= 3:
+                return round(seller_price, 2)
+            counter = previous_buyer + 0.50 * (seller_price - previous_buyer)
+            return round(min(maximum, counter), 2)
+
+        counter = previous_buyer + 0.40 * (seller_price - previous_buyer)
+        return round(min(maximum, counter), 2)
 
     @staticmethod
     def _message(raw: str) -> str:
