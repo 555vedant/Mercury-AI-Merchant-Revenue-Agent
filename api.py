@@ -71,6 +71,7 @@ class NegotiateRequest(BaseModel):
     product_sku: str = Field(min_length=1)
     buyer_max_price: float = Field(default=150.0, gt=0)
     max_rounds: int = Field(default=4, ge=1, le=8)
+    cvo_enabled: bool = Field(default=False)
 
 
 class PaymentCreateRequest(BaseModel):
@@ -256,6 +257,15 @@ def negotiate(
 
     create_customer(customer_id)
 
+    clv_score = 0.0
+    if request.cvo_enabled:
+        customer = get_customer(customer_id)
+        if customer:
+            total_spend = float(customer["total_spend"])
+            total_profit = float(customer["total_profit"])
+            total_orders = int(customer["total_orders"])
+            clv_score = round(total_profit * 0.3 + total_spend * 0.6 + total_orders * 10, 2)
+
     revenue_engine = RevenueEngine(merchant)
 
     policy_gate = PolicyGate(
@@ -287,6 +297,7 @@ def negotiate(
         merchant_data=merchant,
         policy_gate=policy_gate,
         audit_trail=audit_trail,
+        clv_score=clv_score,
     )
 
     env = make(

@@ -42,7 +42,7 @@ export function fetchCatalog() {
 /* Negotiation + payment                                               */
 /* ------------------------------------------------------------------ */
 
-export function negotiate({ userRequirement, productSku, buyerMaxPrice, maxRounds = 4 }) {
+export function negotiate({ userRequirement, productSku, buyerMaxPrice, maxRounds = 4, cvoEnabled = false }) {
   return request('/negotiate', {
     method: 'POST',
     body: JSON.stringify({
@@ -51,6 +51,7 @@ export function negotiate({ userRequirement, productSku, buyerMaxPrice, maxRound
       buyer_max_price: buyerMaxPrice,
       max_rounds: maxRounds,
       customer_id: customerId,
+      cvo_enabled: cvoEnabled,
     }),
   })
 }

@@ -482,7 +482,14 @@ function NegotiationPage({ product, onBack, onDone }) {
   const [payment, setPayment] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [cvoEnabled, setCvoEnabled] = useState(
+    () => localStorage.getItem('mercury_cvo') === 'true'
+  )
   const ledgerEndRef = useRef(null)
+
+  useEffect(() => {
+    localStorage.setItem('mercury_cvo', cvoEnabled)
+  }, [cvoEnabled])
 
   const image = getGallery(product)[0]
   const stock = stockInfo(product.inventory_quantity)
@@ -514,6 +521,7 @@ function NegotiationPage({ product, onBack, onDone }) {
         productSku: product.sku,
         buyerMaxPrice: Number(maxPrice),
         maxRounds: 4,
+        cvoEnabled,
       })
 
       setNegotiation(data)
@@ -580,8 +588,34 @@ function NegotiationPage({ product, onBack, onDone }) {
       )}
 
       {!started && !negotiation && (
-        <form className="offer-form page-offer-form" onSubmit={negotiate}>
-          <div className="offer-form-heading">
+        <>
+          <div className="offer-form page-offer-form" style={{ marginBottom: '1.5rem', background: 'var(--surface-sunken)', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)', padding: '1.5rem' }}>
+            <div className="offer-form-heading" style={{ margin: 0 }}>
+              <h3>Merchant Settings</h3>
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+              <div>
+                <strong>Customer Value Optimization</strong>
+                <p style={{ margin: '0.5rem 0 0', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+                  {cvoEnabled 
+                    ? 'ON → Merchant Agent considers customer history/CLV.' 
+                    : 'OFF → Merchant Agent treats the customer normally.'}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="secondary-button"
+                style={{ minWidth: '80px' }}
+                onClick={() => setCvoEnabled(!cvoEnabled)}
+              >
+                {cvoEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </div>
+
+          <form className="offer-form page-offer-form" onSubmit={negotiate}>
+            <div className="offer-form-heading">
             <h3>Your offer</h3>
             <p>
               Tell the seller what you're looking for and the most
@@ -618,6 +652,7 @@ function NegotiationPage({ product, onBack, onDone }) {
             {loading ? 'Sending offer' : 'Send offer'} <span>→</span>
           </button>
         </form>
+        </>
       )}
 
       {started && (

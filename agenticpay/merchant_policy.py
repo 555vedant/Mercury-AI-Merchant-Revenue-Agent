@@ -19,8 +19,8 @@ class MerchantPolicy:
         self.metrics = {"before": {"negotiations": 0, "conversions": 0, "profit": 0.0, "accepted_price": 0.0}, "after": {"negotiations": 0, "conversions": 0, "profit": 0.0, "accepted_price": 0.0}}
         self._load()
 
-    def state_key(self, sku: str, inventory: int, buyer_offer: float | None, buyer_max_price: float, margin: float, round_number: int) -> str:
-        return json.dumps([sku, inventory, self._bucket(buyer_offer), self._bucket(buyer_max_price), round(margin, 2), round_number], separators=(",", ":"))
+    def state_key(self, sku: str, inventory: int, buyer_offer: float | None, buyer_max_price: float, margin: float, round_number: int, clv_score: float = 0.0) -> str:
+        return json.dumps([sku, inventory, self._bucket(buyer_offer), self._bucket(buyer_max_price), round(margin, 2), round_number, self._bucket(clv_score)], separators=(",", ":"))
 
     def select_action(self, state: str, allowed_actions: tuple[str, ...] = ACTIONS) -> str:
         self._ensure_state(state)

@@ -1,4 +1,4 @@
-﻿"""Seller negotiation agent with merchant revenue controls."""
+"""Seller negotiation agent with merchant revenue controls."""
 import json
 from typing import Any, Dict, List, Optional
 
@@ -11,7 +11,7 @@ from agenticpay.merchant_policy import MerchantPolicy, reward_for_episode
 from agenticpay.policy_gate import PolicyConfig, PolicyContext, PolicyGate
 
 class SellerAgent(BaseAgent):
-    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None, audit_trail: Optional[AuditTrail] = None):
+    def __init__(self, model: BaseLLM, name: str = "Seller", role_description: str = "an e-commerce seller seeking profitable sales", seller_min_price: Optional[float] = None, merchant_data: Optional[MerchantData] = None, merchant_policy: Optional[MerchantPolicy] = None, policy_gate: Optional[PolicyGate] = None, audit_trail: Optional[AuditTrail] = None, clv_score: float = 0.0):
         super().__init__(model, role_description, name)
         self.seller_min_price = seller_min_price
         self.revenue_engine = RevenueEngine(merchant_data) if merchant_data else None
@@ -23,6 +23,7 @@ class SellerAgent(BaseAgent):
         self.last_state: Optional[str] = None
         self.learned_at_start = False
         self.audit_trail = audit_trail
+        self.clv_score = clv_score
 
     def _record_decision(self, action: str, *, reason: str, offer_price: Optional[float], attempted_price: Optional[float], failed_rule: Optional[str] = None) -> None:
         if not self.audit_trail:
@@ -63,7 +64,7 @@ class SellerAgent(BaseAgent):
         self.learned_at_start = self.merchant_policy.has_learning if self.merchant_policy else False
         state = None
         if self.merchant_policy and self.revenue_engine:
-            state = self.merchant_policy.state_key(self.revenue_engine.merchant.sku, self.revenue_engine.merchant.inventory_quantity, buyer_price, buyer_maximum, current_margin, int(current_state.get("current_round", 0)))
+            state = self.merchant_policy.state_key(self.revenue_engine.merchant.sku, self.revenue_engine.merchant.inventory_quantity, buyer_price, buyer_maximum, current_margin, int(current_state.get("current_round", 0)), self.clv_score)
         if repeated_offer and buyer_is_safe:
             # The latest seller offer is the authoritative agreement anchor.
             self.last_action = "ACCEPT"
@@ -107,7 +108,7 @@ class SellerAgent(BaseAgent):
         self._record_decision(self.last_action, reason=reason, offer_price=price, attempted_price=buyer_price, failed_rule=failed_rule)
         self.last_offer = price
         self.last_decision = self.revenue_engine.evaluate(price) if self.revenue_engine else {"revenue": price, "cost": 0.0, "profit": price, "margin_rate": 1.0}
-        prompt = f"""You are an e-commerce seller. Product: {self.context.get('product_info', {})}. Conversation: {self._history_text(conversation_history)}. Your selected strategy is {self.last_action} and your valid offer is ₹{price:.2f}. Return JSON only: {{"message":"one concise, polite sentence supporting this strategy and offer"}}. Do not reveal internal costs, margin rules, or use price tags."""
+        prompt = f"""You are an e-commerce seller. Product: {self.context.get('product_info', {})}. Customer CLV Score: {self.clv_score}. Conversation: {self._history_text(conversation_history)}. Your selected strategy is {self.last_action} and your valid offer is ₹{price:.2f}. Return JSON only: {{"message":"one concise, polite sentence supporting this strategy and offer"}}. Do not reveal internal costs, margin rules, or use price tags."""
         message = self._message(self.model.generate(prompt, temperature=0.0, max_tokens=80, response_mime_type="application/json", response_json_schema={"type":"object","properties":{"message":{"type":"string"}},"required":["message"]}))
         return f"{message} ### SELLER_ACTION({self.last_action}) ### ### SELLER_PRICE(${price:.2f}) ###"
 
