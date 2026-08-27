@@ -1,691 +1,7 @@
 {
   "q_table": {
-    "[\"CERAMIC-MUG-006\",40,20,30,0.25,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,30,0.42,1]": {
-      "ACCEPT": 1.0294,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,30,30,0.45,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,30,30,0.46,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.19,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.41,1]": {
-      "ACCEPT": 1.0037,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,10,20,0.03,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.27,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.3,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.3,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.22,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.42,1]": {
-      "ACCEPT": 1.83006,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.15,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.32,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.39,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.39,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,30,0.28,0]": {
-      "ACCEPT": 1.41948,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.38,2]": {
-      "ACCEPT": 0.9563,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,10,20,-0.02,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.26,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.26,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",40,20,20,0.26,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,140,200,0.08,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,200,0.3,1]": {
-      "ACCEPT": 4.4937,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,130,180,-0.03,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,180,0.18,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,180,0.26,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,180,0.26,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",0,20,20,0.22,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"CERAMIC-MUG-006\",0,20,20,0.42,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": -0.72
-    },
-    "[\"WINTER-JACKET-001\",12,100,140,0.18,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,140,0.35,1]": {
-      "ACCEPT": 1.6066,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,100,130,0.16,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,130,0.35,1]": {
-      "ACCEPT": 1.5919,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,240,330,0.44,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,240,330,0.44,1]": {
-      "ACCEPT": 2.9769,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,220,0.14,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,220,0.32,1]": {
-      "ACCEPT": 1.9394,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,210,0.13,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,210,0.31,1]": {
-      "ACCEPT": 3.44062,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,210,0.12,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,200,0.1,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,110,150,-0.23,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,150,0.1,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,150,0.11,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,150,0.11,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,140,190,0.03,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,190,0.29,1]": {
-      "ACCEPT": 3.15798,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,130,180,0.0,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,180,0.19,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,180,0.28,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,180,0.28,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,140,190,0.02,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,130,190,0.01,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,190,0.17,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,190,0.24,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,190,0.28,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,210,0.23,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,210,0.29,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,210,0.36,3]": {
-      "ACCEPT": 4.01922,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,220,0.14,0,100]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.24,1,100]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,220,0.29,2,100]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,220,0.36,3,100]": {
-      "ACCEPT": 4.04244,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,220,0.14,0,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.24,1,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,220,0.29,2,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,220,0.36,3,0]": {
-      "ACCEPT": 2.2458,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,250,0.26,0,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,250,0.31,1,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,200,250,0.34,2,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,250,0.37,3,0]": {
-      "ACCEPT": 2.3563,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,250,0.26,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,250,0.31,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,200,250,0.34,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,250,0.37,3]": {
-      "ACCEPT": 2.3563,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.22,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.22,1,100]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,220,0.27,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,220,0.27,2,100]": {
-      "ACCEPT": 1.6598,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,200,220,0.33,3,100]": {
-      "ACCEPT": 3.67272,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.24,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,190,220,0.29,2]": {
-      "ACCEPT": 3.23554,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,220,0.14,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,150,220,0.14,0,100]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
     "[\"SMART-WATCH-005\",7,160,220,0.16,0]": {
       "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,220,0.16,0,230]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.23,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.23,1,230]": {
-      "ACCEPT": 1.4454,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,220,0.28,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,220,0.28,2,230]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,200,220,0.33,3,230]": {
-      "ACCEPT": 2.0535,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"TRAVEL-BACKPACK-002\",25,70,90,0.25,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"TRAVEL-BACKPACK-002\",25,70,90,0.25,0,230]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"TRAVEL-BACKPACK-002\",25,70,90,0.32,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"TRAVEL-BACKPACK-002\",25,70,90,0.32,1,230]": {
-      "ACCEPT": 1.184,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,160,220,0.16,0,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,170,220,0.23,1,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,180,220,0.28,2,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"SMART-WATCH-005\",7,210,220,0.36,3,290]": {
-      "ACCEPT": 2.2836,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,90,120,0.07,0]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,90,120,0.07,0,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,100,120,0.2,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,100,120,0.2,1,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,110,120,0.27,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,110,120,0.27,2,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,120,0.31,3]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,120,0.31,3,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": -0.2,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,100,140,0.21,0]": {
-      "ACCEPT": 1.84014,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,100,140,0.21,0,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,110,140,0.28,1]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,110,140,0.28,1,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,140,0.32,2]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,120,140,0.32,2,290]": {
-      "ACCEPT": 0.0,
-      "SMALL_COUNTER": 0.0,
-      "TARGET_COUNTER": 0.0,
-      "REJECT": 0.0
-    },
-    "[\"WINTER-JACKET-001\",12,130,140,0.37,3,290]": {
-      "ACCEPT": 1.7023,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
@@ -703,66 +19,108 @@
       "REJECT": 0.0
     },
     "[\"SMART-WATCH-005\",7,210,220,0.36,3]": {
-      "ACCEPT": 4.06566,
+      "ACCEPT": 2.2587,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,160,220,0.16,0,630]": {
+    "[\"SMART-WATCH-005\",7,160,220,0.16,0,1350]": {
       "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,170,220,0.23,1,630]": {
+    "[\"SMART-WATCH-005\",7,170,220,0.23,1]": {
       "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,180,220,0.28,2,630]": {
+    "[\"SMART-WATCH-005\",7,170,220,0.23,1,1350]": {
       "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,200,220,0.33,3,630]": {
+    "[\"SMART-WATCH-005\",7,180,220,0.28,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,220,0.28,2,1350]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,200,220,0.33,3,1350]": {
       "ACCEPT": 2.0535,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,150,210,0.13,0,0]": {
+    "[\"SMART-WATCH-005\",7,160,220,0.16,0,130]": {
       "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,170,210,0.23,1,0]": {
+    "[\"SMART-WATCH-005\",7,170,220,0.23,1,130]": {
       "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
       "REJECT": 0.0
     },
-    "[\"SMART-WATCH-005\",7,190,210,0.29,2,0]": {
-      "ACCEPT": 1.7688,
+    "[\"SMART-WATCH-005\",7,180,220,0.28,2,130]": {
+      "ACCEPT": 0.0,
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,200,220,0.33,3,130]": {
+      "ACCEPT": 2.0535,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,90,120,0.1,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,100,120,0.23,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,110,120,0.29,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,120,0.33,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
       "REJECT": 0.0
     }
   },
   "metrics": {
     "before": {
       "negotiations": 1,
-      "conversions": 0,
-      "profit": 0.0,
-      "accepted_price": 0.0
+      "conversions": 1,
+      "profit": 74.92,
+      "accepted_price": 207.92
     },
     "after": {
-      "negotiations": 51,
-      "conversions": 41,
-      "profit": 2095.02,
-      "accepted_price": 6368.02
+      "negotiations": 3,
+      "conversions": 2,
+      "profit": 132.16,
+      "accepted_price": 398.16
     }
   }
 }
