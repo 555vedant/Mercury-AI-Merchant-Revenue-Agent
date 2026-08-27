@@ -10,6 +10,56 @@ import {
   fetchCustomerAudit,
 } from './Api'
 
+/* =========================================================
+   ICONS — small inline SVGs, no external icon font so the
+   trust badges never flash-of-unstyled / never 404.
+========================================================= */
+const Icon = {
+  Search: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...p}>
+      <circle cx="11" cy="11" r="7" />
+      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  ),
+  Lock: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <rect x="4" y="10" width="16" height="10" rx="2" />
+      <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+    </svg>
+  ),
+  Shield: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M12 2l8 3.5V11c0 5-3.4 8.7-8 9.9-4.6-1.2-8-4.9-8-9.9V5.5L12 2z" />
+      <path d="M9 12l2 2 4-4" />
+    </svg>
+  ),
+  Cart: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6" />
+    </svg>
+  ),
+  Check: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  ),
+  Star: ({ fill, ...p }) => (
+    <svg viewBox="0 0 24 24" fill={fill ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" {...p}>
+      <polygon points="12 2 15 9 22.5 9.5 17 14.8 18.5 22 12 18.2 5.5 22 7 14.8 1.5 9.5 9 9" />
+    </svg>
+  ),
+  ImageOff: (p) => (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}>
+      <path d="M21 15V5a2 2 0 0 0-2-2H8" />
+      <path d="M3 3l18 18" />
+      <path d="M3 8v11a2 2 0 0 0 2 2h14" />
+      <circle cx="9" cy="9" r="1.5" />
+    </svg>
+  ),
+}
+
 const PRODUCT_IMAGES = {
   'WINTER-JACKET-001': [
     'https://images.unsplash.com/photo-1544923246-77307dd654cb?auto=format&fit=crop&w=1200&q=80',
@@ -17,19 +67,19 @@ const PRODUCT_IMAGES = {
   ],
   'TRAIL-RUNNER-014': [
     'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1562183241-b937e95585b6?auto=format&fit=crop&w=1200&q=80',
   ],
   'AUDIO-OVER-EAR-220': [
     'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1528017486352-b49206ec821b?auto=format&fit=crop&w=1200&q=80',
   ],
   'LEATHER-PACK-07': [
-    'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&w=1200&q=80',
   ],
   'CHRONO-WATCH-45': [
-    'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=80',
-    'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&w=1200&q=80',
+    'https://images.unsplash.com/photo-1633451238208-11c8e6c1fed4?auto=format&fit=crop&w=1200&q=80',
   ],
   'ESPRESSO-BAR-3': [
     'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=80',
@@ -54,6 +104,17 @@ const CATEGORY_FALLBACK_IMAGE = {
   default: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?auto=format&fit=crop&w=1200&q=80',
 }
 
+// Deterministic palette per category so a broken-image fallback still
+// reads as "on brand" instead of a jarring grey box.
+const CATEGORY_TINT = {
+  apparel: 'linear-gradient(135deg, #0b3a58, #1c7fb8)',
+  footwear: 'linear-gradient(135deg, #0a2e46, #146c9e)',
+  electronics: 'linear-gradient(135deg, #082133, #0b3a58)',
+  accessories: 'linear-gradient(135deg, #0f4f78, #2f9bdb)',
+  home: 'linear-gradient(135deg, #0d5c46, #16a35a)',
+  default: 'linear-gradient(135deg, #082133, #0b3a58)',
+}
+
 function getGallery(product) {
   return (
     PRODUCT_IMAGES[product.sku] || [
@@ -61,6 +122,19 @@ function getGallery(product) {
         CATEGORY_FALLBACK_IMAGE.default,
     ]
   )
+}
+
+// Deterministic mock rating derived from the SKU so the same product
+// always shows the same rating (no layout jitter, no fake randomness
+// on every render).
+function ratingFor(sku) {
+  let hash = 0
+  for (let i = 0; i < sku.length; i += 1) {
+    hash = (hash * 31 + sku.charCodeAt(i)) >>> 0
+  }
+  const rating = 3.6 + (hash % 14) / 10 // 3.6 – 5.0
+  const count = 40 + (hash % 900)
+  return { rating: Math.round(rating * 10) / 10, count }
 }
 
 const fallbackCatalog = [
@@ -207,32 +281,157 @@ function stockInfo(qty) {
   return { label: 'In stock', tone: 'in' }
 }
 
-function StatusPill({ value }) {
-  const clean = String(value || 'pending')
-    .toLowerCase()
-    .replace(/\_/g, '-')
+function formatDate(value) {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return date.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })
+}
+
+/* =========================================================
+   SHARED PRESENTATION COMPONENTS
+========================================================= */
+
+// Fixed-ratio image container with a shimmer skeleton while
+// loading and an on-brand fallback if the image 404s — the
+// aspect ratio is set by the parent .product-card-media /
+// .drawer-gallery-main / .summary-strip so nothing ever shifts.
+function SmartImage({ src, alt, category, initial }) {
+  const [status, setStatus] = useState('loading') // loading | loaded | error
+
+  useEffect(() => {
+    setStatus('loading')
+  }, [src])
+
+  if (!src || status === 'error') {
+    return (
+      <div
+        className="media-fallback"
+        style={{ background: CATEGORY_TINT[category] || CATEGORY_TINT.default }}
+      >
+        <Icon.ImageOff />
+        <span>{initial || 'No image'}</span>
+      </div>
+    )
+  }
 
   return (
-    <span className={`status-pill ${clean}`}>
-      {value || 'Pending'}
-    </span>
+    <>
+      {status === 'loading' && <div className="media-skeleton" />}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setStatus('loaded')}
+        onError={() => setStatus('error')}
+        style={{ opacity: status === 'loaded' ? 1 : 0, transition: 'opacity 220ms ease' }}
+      />
+    </>
   )
+}
+
+function RatingStars({ sku }) {
+  const { rating, count } = ratingFor(sku)
+  const rounded = Math.round(rating)
+
+  return (
+    <div className="rating-row">
+      <div className="rating-stars" style={{ color: 'var(--gold)' }}>
+        {[1, 2, 3, 4, 5].map((n) => (
+          <Icon.Star key={n} fill={n <= rounded} />
+        ))}
+      </div>
+      <span className="rating-count">
+        {rating.toFixed(1)} ({count.toLocaleString('en-IN')})
+      </span>
+    </div>
+  )
+}
+
+function StatusPill({ value }) {
+  const clean = String(value || 'pending').toLowerCase().replace(/_/g, '-')
+  return <span className={`status-pill ${clean}`}>{value || 'Pending'}</span>
+}
+
+// Small quick-add control with the "morph to checkmark" micro-interaction
+// called out in the brief. Purely a visual cart-add affordance living on
+// the card; the real purchase flow is still the negotiation page.
+function QuickAddButton({ disabled, productName }) {
+  const [added, setAdded] = useState(false)
+  const timeoutRef = useRef(null)
+
+  useEffect(() => () => clearTimeout(timeoutRef.current), [])
+
+  function handleClick(event) {
+    event.stopPropagation()
+    if (disabled || added) return
+    setAdded(true)
+    timeoutRef.current = setTimeout(() => setAdded(false), 1600)
+  }
+
+  return (
+    <button
+      type="button"
+      className={`quick-add-btn ${added ? 'added' : ''}`}
+      onClick={handleClick}
+      disabled={disabled}
+      aria-label={added ? `Added ${productName} to cart` : `Add ${productName} to cart`}
+      title={disabled ? 'Out of stock' : 'Quick add to cart'}
+    >
+      <Icon.Cart className="icon-cart" />
+      <Icon.Check className="icon-check" />
+    </button>
+  )
+}
+
+// 3D tilt wrapper: tracks pointer position over the card and applies a
+// gentle perspective rotation, resetting smoothly on mouse leave.
+function useTilt(maxDeg = 7) {
+  const ref = useRef(null)
+
+  function onMouseMove(event) {
+    const el = ref.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+    const px = (event.clientX - rect.left) / rect.width
+    const py = (event.clientY - rect.top) / rect.height
+    const rx = (0.5 - py) * maxDeg * 2
+    const ry = (px - 0.5) * maxDeg * 2
+    el.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-3px)`
+  }
+
+  function onMouseLeave() {
+    const el = ref.current
+    if (!el) return
+    el.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0)'
+  }
+
+  return { ref, onMouseMove, onMouseLeave }
 }
 
 function ProductCard({ product, onOpen, onNegotiate }) {
   const stock = stockInfo(product.inventory_quantity)
   const image = getGallery(product)[0]
+  const tilt = useTilt()
 
   return (
-    <article className="product-card" onClick={() => onOpen(product)}>
+    <article
+      className="product-card"
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={tilt.onMouseLeave}
+      onClick={() => onOpen(product)}
+    >
       <div className="product-card-media">
-        <img src={image} alt={product.name} loading="lazy" />
-        <span className="discount-chip">
-          {discountPercent(product.list_price)}% off
-        </span>
-        {stock.tone !== 'in' && (
-          <span className={`stock-chip ${stock.tone}`}>{stock.label}</span>
-        )}
+        <SmartImage
+          src={image}
+          alt={product.name}
+          category={product.category}
+          initial={product.name?.[0]}
+        />
+        <span className="discount-chip">{discountPercent(product.list_price)}% off</span>
+        {stock.tone !== 'in' && <span className={`stock-chip ${stock.tone}`}>{stock.label}</span>}
+        <QuickAddButton disabled={stock.tone === 'out'} productName={product.name} />
       </div>
 
       <div className="product-card-body">
@@ -242,9 +441,12 @@ function ProductCard({ product, onOpen, onNegotiate }) {
 
         <h3>{product.name}</h3>
 
+        <RatingStars sku={product.sku} />
+
         <div className="product-card-price">
           <strong>{money(product.list_price)}</strong>
           <s>{money(compareAtPrice(product.list_price))}</s>
+          <span className="save-tag">{discountPercent(product.list_price)}% off</span>
         </div>
 
         <button
@@ -263,14 +465,24 @@ function ProductCard({ product, onOpen, onNegotiate }) {
   )
 }
 
+function SkeletonCard() {
+  return (
+    <div className="skeleton-card">
+      <div className="media-skeleton" />
+      <div className="skeleton-lines">
+        <div className="skeleton-line w-40" />
+        <div className="skeleton-line w-80" />
+        <div className="skeleton-line w-60" />
+      </div>
+    </div>
+  )
+}
+
 function NegotiationLedger({ history }) {
   const rounds = []
 
   for (let i = 0; i < history.length; i += 2) {
-    rounds.push({
-      buyer: history[i],
-      seller: history[i + 1],
-    })
+    rounds.push({ buyer: history[i], seller: history[i + 1] })
   }
 
   return (
@@ -303,31 +515,22 @@ function AuditTrail({ entries, fallbackProductName }) {
     <div className="audit-list">
       {entries.map((entry, index) => {
         const data = entry?.data || {}
-        const decision =
-          data.decision || data.status || entry?.event || 'Unknown'
+        const decision = data.decision || data.status || entry?.event || 'Unknown'
         const reason = data.reason || 'No reason recorded.'
         const productName = data.product || fallbackProductName
-        const price =
-          data.agreed_price ?? data.attempted_price ?? data.amount
+        const price = data.agreed_price ?? data.attempted_price ?? data.amount
         const failedRule =
-          data.failed_rule ||
-          (Array.isArray(data.failed_rules) ? data.failed_rules[0] : null)
+          data.failed_rule || (Array.isArray(data.failed_rules) ? data.failed_rules[0] : null)
 
         return (
-          <div
-            key={`${entry?.timestamp || index}-${index}`}
-            className="audit-entry"
-          >
+          <div key={`${entry?.timestamp || index}-${index}`} className="audit-entry">
             <div className="audit-header">
               <strong>{decision}</strong>
               <span>
-                {new Date(entry?.timestamp || Date.now()).toLocaleString(
-                  'en-IN',
-                  {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  },
-                )}
+                {new Date(entry?.timestamp || Date.now()).toLocaleString('en-IN', {
+                  dateStyle: 'medium',
+                  timeStyle: 'short',
+                })}
               </span>
             </div>
 
@@ -401,18 +604,18 @@ function ProductDrawer({ product, onClose, onNegotiate }) {
   return (
     <div className="drawer-overlay" onClick={onClose}>
       <div className="drawer" onClick={(event) => event.stopPropagation()}>
-        <button
-          type="button"
-          className="drawer-close"
-          onClick={onClose}
-          aria-label="Close"
-        >
+        <button type="button" className="drawer-close" onClick={onClose} aria-label="Close">
           Close
         </button>
 
         <div className="drawer-gallery">
           <div className="drawer-gallery-main">
-            <img src={gallery[activeImage]} alt={product.name} />
+            <SmartImage
+              src={gallery[activeImage]}
+              alt={product.name}
+              category={product.category}
+              initial={product.name?.[0]}
+            />
           </div>
 
           {gallery.length > 1 && (
@@ -421,9 +624,7 @@ function ProductDrawer({ product, onClose, onNegotiate }) {
                 <button
                   type="button"
                   key={src}
-                  className={`drawer-thumb ${
-                    index === activeImage ? 'active' : ''
-                  }`}
+                  className={`drawer-thumb ${index === activeImage ? 'active' : ''}`}
                   onClick={() => setActiveImage(index)}
                 >
                   <img src={src} alt="" />
@@ -440,6 +641,8 @@ function ProductDrawer({ product, onClose, onNegotiate }) {
 
           <h2>{product.name}</h2>
 
+          <RatingStars sku={product.sku} />
+
           <p className="drawer-description">{product.description}</p>
 
           <ul className="feature-list">
@@ -454,9 +657,7 @@ function ProductDrawer({ product, onClose, onNegotiate }) {
               <s>{money(compareAtPrice(product.list_price))}</s>
             </div>
 
-            <span className={`stock-chip ${stock.tone}`}>
-              {stock.label}
-            </span>
+            <span className={`stock-chip ${stock.tone}`}>{stock.label}</span>
           </div>
 
           <button
@@ -474,9 +675,7 @@ function ProductDrawer({ product, onClose, onNegotiate }) {
 }
 
 function NegotiationPage({ product, onBack, onDone }) {
-  const [request, setRequest] = useState(
-    `I'd like the ${product.name}`,
-  )
+  const [request, setRequest] = useState(`I'd like the ${product.name}`)
   const [maxPrice, setMaxPrice] = useState(String(product.list_price))
   const [negotiation, setNegotiation] = useState(null)
   const [payment, setPayment] = useState(null)
@@ -488,9 +687,7 @@ function NegotiationPage({ product, onBack, onDone }) {
   // Auto-pay flag: when ON, we skip the manual "Accept & pay" button and
   // fire createPayment() automatically the moment the negotiation comes
   // back AGREED + policy-approved. When OFF, behavior is unchanged from
-  // before (manual button). The toggle for this now lives in a settings
-  // panel that stays visible for the whole page (not just pre-offer), so
-  // it can always be found and flipped.
+  // before (manual button).
   const [autoPayEnabled, setAutoPayEnabled] = useState(
     () => localStorage.getItem('mercury_autopay') === 'true'
   )
@@ -512,15 +709,10 @@ function NegotiationPage({ product, onBack, onDone }) {
   const policy = negotiation?.policy
   const revenue = negotiation?.revenue || {}
   const started = !!negotiation || loading
-  const auditEntries = Array.isArray(negotiation?.audit_trail)
-    ? negotiation.audit_trail
-    : []
+  const auditEntries = Array.isArray(negotiation?.audit_trail) ? negotiation.audit_trail : []
 
   useEffect(() => {
-    ledgerEndRef.current?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'end',
-    })
+    ledgerEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
   }, [negotiation?.conversation_history?.length])
 
   async function negotiate(event) {
@@ -554,9 +746,7 @@ function NegotiationPage({ product, onBack, onDone }) {
     setPayment({ status: 'creating' })
 
     try {
-      const data = await createPaymentRequest(
-        negotiation.negotiation_id,
-      )
+      const data = await createPaymentRequest(negotiation.negotiation_id)
       setPayment(data)
     } catch (requestError) {
       setPayment(null)
@@ -568,9 +758,6 @@ function NegotiationPage({ product, onBack, onDone }) {
   // negotiation that also passed the fixed approval policy — but only
   // when the merchant has autoPayEnabled turned on. Runs once per
   // negotiation_id, and only if a payment hasn't already been kicked off.
-  // The order-confirmation / payment slip below renders automatically
-  // for BOTH the autopay and manual paths, as soon as payment.order_id
-  // exists.
   useEffect(() => {
     if (!autoPayEnabled) return
     if (!negotiation) return
@@ -598,7 +785,12 @@ function NegotiationPage({ product, onBack, onDone }) {
       </button>
 
       <div className="summary-strip">
-        <img src={image} alt={product.name} />
+        <SmartImage
+          src={image}
+          alt={product.name}
+          category={product.category}
+          initial={product.name?.[0]}
+        />
 
         <div className="summary-strip-info">
           <span className="product-card-category">
@@ -613,9 +805,7 @@ function NegotiationPage({ product, onBack, onDone }) {
           </div>
         </div>
 
-        <span className={`stock-chip ${stock.tone}`}>
-          {stock.label}
-        </span>
+        <span className={`stock-chip ${stock.tone}`}>{stock.label}</span>
       </div>
 
       {error && (
@@ -625,50 +815,13 @@ function NegotiationPage({ product, onBack, onDone }) {
         </div>
       )}
 
-      <section
-        aria-label="Merchant Settings"
-        style={{
-          width: '100%',
-          background: '#ffffff',
-          border: '1px solid #e3e1d7',
-          borderRadius: '10px',
-          padding: '22px',
-          marginBottom: '20px',
-          color: '#15201b',
-        }}
-      >
-        <h3
-          style={{
-            margin: '0 0 20px',
-            fontFamily: 'Space Grotesk, Inter, sans-serif',
-            fontSize: '18px',
-            fontWeight: 600,
-          }}
-        >
-          Merchant Settings
-        </h3>
+      <section aria-label="Merchant Settings" className="settings-panel">
+        <h3>Merchant Settings</h3>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '20px',
-            padding: '4px 0',
-          }}
-        >
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: '15px', fontWeight: 600 }}>
-              Customer Value Optimization
-            </div>
-            <div
-              style={{
-                marginTop: '6px',
-                fontSize: '12px',
-                lineHeight: 1.5,
-                color: '#5f6b62',
-              }}
-            >
+        <div className="settings-row">
+          <div className="settings-row-label">
+            <div className="title">Customer Value Optimization</div>
+            <div className="desc">
               {cvoEnabled
                 ? 'ON → Merchant Agent considers customer history/CLV.'
                 : 'OFF → Merchant Agent treats the customer normally.'}
@@ -677,50 +830,17 @@ function NegotiationPage({ product, onBack, onDone }) {
 
           <button
             type="button"
+            className={`toggle-switch ${cvoEnabled ? 'on' : ''}`}
             onClick={() => setCvoEnabled((value) => !value)}
             aria-pressed={cvoEnabled}
             aria-label="Toggle Customer Value Optimization"
-            style={{
-              flex: '0 0 auto',
-              width: '74px',
-              height: '36px',
-              borderRadius: '999px',
-              border: '1px solid #c6c8bf',
-              background: cvoEnabled ? '#101d17' : '#d8d9d1',
-              color: cvoEnabled ? '#ffffff' : '#30362f',
-              fontFamily: 'DM Mono, monospace',
-              fontSize: '11px',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
-            {cvoEnabled ? 'ON' : 'OFF'}
-          </button>
+          />
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '20px',
-            padding: '18px 0 4px',
-            marginTop: '18px',
-            borderTop: '1px solid #e3e1d7',
-          }}
-        >
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <div style={{ fontSize: '15px', fontWeight: 600 }}>
-              Autopay after agreement
-            </div>
-            <div
-              style={{
-                marginTop: '6px',
-                fontSize: '12px',
-                lineHeight: 1.5,
-                color: '#5f6b62',
-              }}
-            >
+        <div className="settings-row">
+          <div className="settings-row-label">
+            <div className="title">Autopay after agreement</div>
+            <div className="desc">
               {autoPayEnabled
                 ? 'ON → Automatically create the Razorpay Test Mode order after an approved agreement.'
                 : 'OFF → Show the manual Accept & pay button after an approved agreement.'}
@@ -729,25 +849,11 @@ function NegotiationPage({ product, onBack, onDone }) {
 
           <button
             type="button"
+            className={`toggle-switch ${autoPayEnabled ? 'on' : ''}`}
             onClick={() => setAutoPayEnabled((value) => !value)}
             aria-pressed={autoPayEnabled}
             aria-label="Toggle Autopay after agreement"
-            style={{
-              flex: '0 0 auto',
-              width: '74px',
-              height: '36px',
-              borderRadius: '999px',
-              border: '1px solid #c6c8bf',
-              background: autoPayEnabled ? '#101d17' : '#d8d9d1',
-              color: autoPayEnabled ? '#ffffff' : '#30362f',
-              fontFamily: 'DM Mono, monospace',
-              fontSize: '11px',
-              fontWeight: 700,
-              cursor: 'pointer',
-            }}
-          >
-            {autoPayEnabled ? 'ON' : 'OFF'}
-          </button>
+          />
         </div>
       </section>
 
@@ -756,19 +862,14 @@ function NegotiationPage({ product, onBack, onDone }) {
           <div className="offer-form-heading">
             <h3>Your offer</h3>
             <p>
-              Tell the seller what you're looking for and the most
-              you're willing to pay. Negotiation happens automatically
-              from here.
+              Tell the seller what you're looking for and the most you're willing to pay.
+              Negotiation happens automatically from here.
             </p>
           </div>
 
           <label>
             What are you looking for
-            <textarea
-              value={request}
-              onChange={(event) => setRequest(event.target.value)}
-              rows={2}
-            />
+            <textarea value={request} onChange={(event) => setRequest(event.target.value)} rows={2} />
           </label>
 
           <label>
@@ -781,11 +882,7 @@ function NegotiationPage({ product, onBack, onDone }) {
             />
           </label>
 
-          <button
-            className="primary-button"
-            disabled={loading}
-            type="submit"
-          >
+          <button className="primary-button" disabled={loading} type="submit">
             {loading && <span className="button-spinner" />}
             {loading ? 'Sending offer' : 'Send offer'} <span>→</span>
           </button>
@@ -805,11 +902,7 @@ function NegotiationPage({ product, onBack, onDone }) {
           </div>
 
           {negotiation && !payment?.order_id && (
-            <button
-              type="button"
-              className="text-link"
-              onClick={resetOffer}
-            >
+            <button type="button" className="text-link" onClick={resetOffer}>
               Edit offer
             </button>
           )}
@@ -825,9 +918,7 @@ function NegotiationPage({ product, onBack, onDone }) {
 
           {negotiation ? (
             <>
-              <NegotiationLedger
-                history={negotiation.conversation_history || []}
-              />
+              <NegotiationLedger history={negotiation.conversation_history || []} />
               <div ref={ledgerEndRef} />
             </>
           ) : (
@@ -850,14 +941,8 @@ function NegotiationPage({ product, onBack, onDone }) {
           </div>
 
           <div>
-            <span>
-              {negotiation.status === 'agreed'
-                ? 'Agreed price'
-                : 'Best offer reached'}
-            </span>
-            <b className="accent-value">
-              {money(negotiation.agreed_price)}
-            </b>
+            <span>{negotiation.status === 'agreed' ? 'Agreed price' : 'Best offer reached'}</span>
+            <b className="accent-value">{money(negotiation.agreed_price)}</b>
           </div>
         </div>
       )}
@@ -866,42 +951,27 @@ function NegotiationPage({ product, onBack, onDone }) {
         <div className="decision timeout">
           <div>
             <strong>No agreement reached</strong>
-            <p>
-              The seller and buyer could not settle within the round
-              limit. Try a higher ceiling.
-            </p>
+            <p>The seller and buyer could not settle within the round limit. Try a higher ceiling.</p>
           </div>
         </div>
       )}
 
-      {negotiation &&
-        negotiation.status === 'agreed' &&
-        policy && (
-          <div
-            className={`decision ${policy.decision?.toLowerCase()}`}
-          >
-            <div>
-              <strong>
-                {policy.decision === 'ALLOW'
-                  ? 'Order approved'
-                  : 'Order needs review'}
-              </strong>
+      {negotiation && negotiation.status === 'agreed' && policy && (
+        <div className={`decision ${policy.decision?.toLowerCase()}`}>
+          <div>
+            <strong>{policy.decision === 'ALLOW' ? 'Order approved' : 'Order needs review'}</strong>
 
-              <p>{policy.reason}</p>
+            <p>{policy.reason}</p>
 
-              <div className="decision-meta">
-                <span>Decision: {policy.decision}</span>
-                <span>Product: {product.name}</span>
-                <span>
-                  Price: {money(negotiation.agreed_price)}
-                </span>
-                <span>
-                  Inventory: {product.inventory_quantity ?? '—'}
-                </span>
-              </div>
+            <div className="decision-meta">
+              <span>Decision: {policy.decision}</span>
+              <span>Product: {product.name}</span>
+              <span>Price: {money(negotiation.agreed_price)}</span>
+              <span>Inventory: {product.inventory_quantity ?? '—'}</span>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
       {auditEntries.length > 0 && (
         <section className="audit-panel">
@@ -909,10 +979,7 @@ function NegotiationPage({ product, onBack, onDone }) {
             <h2>Audit trail</h2>
           </div>
 
-          <AuditTrail
-            entries={auditEntries}
-            fallbackProductName={product.name}
-          />
+          <AuditTrail entries={auditEntries} fallbackProductName={product.name} />
         </section>
       )}
 
@@ -927,16 +994,14 @@ function NegotiationPage({ product, onBack, onDone }) {
           <div className="conversation-loading">
             <span className="loading-dot" />
             <p>
-              Autopay is on — creating your order for{' '}
-              {money(revenue.revenue ?? negotiation.agreed_price)}
+              Autopay is on — creating your order for {money(revenue.revenue ?? negotiation.agreed_price)}
               <span className="ellipsis" />
             </p>
           </div>
         )}
 
       {/* Manual "Accept & pay" button — only shown when autoPayEnabled is
-          OFF and the negotiation is AGREED + policy-approved. When
-          autopay is ON, payment is triggered automatically above. */}
+          OFF and the negotiation is AGREED + policy-approved. */}
       {negotiation &&
         negotiation.status === 'agreed' &&
         policy?.decision === 'ALLOW' &&
@@ -948,29 +1013,22 @@ function NegotiationPage({ product, onBack, onDone }) {
             onClick={createPayment}
             disabled={payment?.status === 'creating'}
           >
-            {payment?.status === 'creating' && (
-              <span className="button-spinner" />
-            )}
+            {payment?.status === 'creating' && <span className="button-spinner" />}
 
             {payment?.status === 'creating'
               ? 'Creating order'
-              : `Accept & pay ${
-                  money(
-                    revenue.revenue ?? negotiation.agreed_price,
-                  )
-                } · Razorpay test`}
+              : `Accept & pay ${money(revenue.revenue ?? negotiation.agreed_price)} · Razorpay test`}
 
             <span>↗</span>
           </button>
         )}
 
       {/* Payment slip — renders automatically for BOTH paths as soon as
-          payment.order_id exists: instantly after autopay fires, or
-          right after the merchant clicks "Accept & pay" manually. */}
+          payment.order_id exists. */}
       {payment?.order_id && (
         <div className="order-confirmation">
           <span className="order-confirmation-mark">
-            Order placed
+            <Icon.Check /> Order placed
           </span>
 
           <h3>Thanks — your order is confirmed</h3>
@@ -992,47 +1050,21 @@ function NegotiationPage({ product, onBack, onDone }) {
             </div>
           </div>
 
-          <p className="muted">
-            This is a Razorpay test-mode order — no funds move.
-          </p>
+          <p className="muted">This is a Razorpay test-mode order — no funds move.</p>
 
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={onDone}
-          >
+          <button type="button" className="secondary-button" onClick={onDone}>
             Continue shopping
           </button>
         </div>
       )}
 
-      {negotiation &&
-        (negotiation.status !== 'agreed' ||
-          policy?.decision !== 'ALLOW') &&
-        !payment?.order_id && (
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={resetOffer}
-          >
-            Make a new offer
-          </button>
-        )}
+      {negotiation && (negotiation.status !== 'agreed' || policy?.decision !== 'ALLOW') && !payment?.order_id && (
+        <button type="button" className="secondary-button" onClick={resetOffer}>
+          Make a new offer
+        </button>
+      )}
     </div>
   )
-}
-
-function formatDate(value) {
-  if (!value) return '—'
-
-  const date = new Date(value)
-
-  if (Number.isNaN(date.getTime())) return '—'
-
-  return date.toLocaleString('en-IN', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  })
 }
 
 function AccountPage({ onBack }) {
@@ -1048,11 +1080,7 @@ function AccountPage({ onBack }) {
     setLoading(true)
     setError('')
 
-    Promise.all([
-      fetchCustomerSummary(),
-      fetchCustomerHistory(),
-      fetchCustomerAudit(),
-    ])
+    Promise.all([fetchCustomerSummary(), fetchCustomerHistory(), fetchCustomerAudit()])
       .then(([summaryData, historyData, auditData]) => {
         if (cancelled) return
 
@@ -1079,13 +1107,8 @@ function AccountPage({ onBack }) {
     }
   }, [])
 
-  const negotiations = Array.isArray(history?.negotiations)
-    ? history.negotiations
-    : []
-
-  const payments = Array.isArray(history?.payments)
-    ? history.payments
-    : []
+  const negotiations = Array.isArray(history?.negotiations) ? history.negotiations : []
+  const payments = Array.isArray(history?.payments) ? history.payments : []
 
   return (
     <div className="negotiation-page account-page">
@@ -1095,10 +1118,7 @@ function AccountPage({ onBack }) {
 
       <div className="account-heading">
         <h1>My activity</h1>
-        <p className="muted">
-          Your negotiations, orders, and policy decisions with
-          Mercury.
-        </p>
+        <p className="muted">Your negotiations, orders, and policy decisions with Mercury.</p>
       </div>
 
       {error && (
@@ -1147,45 +1167,29 @@ function AccountPage({ onBack }) {
               <h2>Negotiation history</h2>
 
               <span className="muted">
-                {negotiations.length} negotiation
-                {negotiations.length === 1 ? '' : 's'}
+                {negotiations.length} negotiation{negotiations.length === 1 ? '' : 's'}
               </span>
             </div>
 
             {negotiations.length ? (
               <div className="history-list">
                 {negotiations.map((entry, index) => (
-                  <div
-                    className="history-row"
-                    key={entry.negotiation_id || index}
-                  >
+                  <div className="history-row" key={entry.negotiation_id || index}>
                     <div className="history-row-main">
-                      <strong>
-                        {entry.sku || 'Product'}
-                      </strong>
-
-                      <span className="muted">
-                        {entry.status || '—'}
-                      </span>
+                      <strong>{entry.sku || 'Product'}</strong>
+                      <span className="muted">{entry.status || '—'}</span>
                     </div>
 
                     <StatusPill value={entry.status} />
 
-                    <b className="accent-value">
-                      {money(entry.final_price)}
-                    </b>
+                    <b className="accent-value">{money(entry.final_price)}</b>
 
-                    <span className="history-date">
-                      {formatDate(entry.created_at)}
-                    </span>
+                    <span className="history-date">{formatDate(entry.created_at)}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="muted">
-                No negotiations yet — start one from any product
-                page.
-              </p>
+              <p className="muted">No negotiations yet — start one from any product page.</p>
             )}
           </section>
 
@@ -1194,42 +1198,27 @@ function AccountPage({ onBack }) {
               <h2>Payment history</h2>
 
               <span className="muted">
-                {payments.length} payment
-                {payments.length === 1 ? '' : 's'}
+                {payments.length} payment{payments.length === 1 ? '' : 's'}
               </span>
             </div>
 
             {payments.length ? (
               <div className="history-list">
                 {payments.map((entry, index) => (
-                  <div
-                    className="history-row"
-                    key={entry.order_id || index}
-                  >
+                  <div className="history-row" key={entry.order_id || index}>
                     <div className="history-row-main">
-                      <strong>
-                        {entry.order_id || 'Order'}
-                      </strong>
-
-                      <span className="muted">
-                        {entry.currency || 'INR'}
-                      </span>
+                      <strong>{entry.order_id || 'Order'}</strong>
+                      <span className="muted">{entry.currency || 'INR'}</span>
                     </div>
 
                     <StatusPill value={entry.status} />
 
                     <b className="accent-value">
-                      {money(
-                        entry.amount != null
-                          ? entry.amount / 100
-                          : entry.amount,
-                      )}
+                      {money(entry.amount != null ? entry.amount / 100 : entry.amount)}
                     </b>
 
                     <span className="history-date">
-                      {formatDate(
-                        entry.created_at || entry.timestamp,
-                      )}
+                      {formatDate(entry.created_at || entry.timestamp)}
                     </span>
                   </div>
                 ))}
@@ -1254,8 +1243,24 @@ function AccountPage({ onBack }) {
   )
 }
 
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div className="site-footer-row">
+        <div className="footer-brand">
+          <span className="logo">Mercury</span>
+          <span className="footer-copyright">© 2026 Mercury. All rights reserved.</span>
+        </div>
+
+        
+      </div>
+    </footer>
+  )
+}
+
 function App() {
-  const [catalog, setCatalog] = useState(fallbackCatalog)
+  const [catalog, setCatalog] = useState(null)
+  const [catalogError, setCatalogError] = useState(false)
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('all')
   const [activeProduct, setActiveProduct] = useState(null)
@@ -1265,11 +1270,12 @@ function App() {
   useEffect(() => {
     fetchCatalog()
       .then((data) => {
-        if (Array.isArray(data) && data.length) {
-          setCatalog(data)
-        }
+        setCatalog(Array.isArray(data) && data.length ? data : fallbackCatalog)
       })
-      .catch(() => {})
+      .catch(() => {
+        setCatalogError(true)
+        setCatalog(fallbackCatalog)
+      })
   }, [])
 
   useEffect(() => {
@@ -1289,25 +1295,21 @@ function App() {
     }
 
     window.addEventListener('popstate', onPopState)
-
     return () => window.removeEventListener('popstate', onPopState)
   }, [])
 
   const categories = useMemo(
-    () => ['all', ...new Set(catalog.map((item) => item.category))],
+    () => ['all', ...new Set((catalog || []).map((item) => item.category))],
     [catalog],
   )
 
   const visible = useMemo(() => {
-    return catalog.filter((item) => {
-      const matchesCategory =
-        category === 'all' || item.category === category
-
+    return (catalog || []).filter((item) => {
+      const matchesCategory = category === 'all' || item.category === category
       const matchesQuery =
         !query ||
         item.name.toLowerCase().includes(query.toLowerCase()) ||
         item.category.toLowerCase().includes(query.toLowerCase())
-
       return matchesCategory && matchesQuery
     })
   }, [catalog, category, query])
@@ -1320,53 +1322,38 @@ function App() {
     setActiveProduct(null)
     setNegotiationProduct(product)
     setView('negotiate')
-    window.history.pushState(
-      { view: 'negotiate' },
-      '',
-      '#negotiate',
-    )
+    window.history.pushState({ view: 'negotiate' }, '', '#negotiate')
   }
 
   function goToAccount() {
     setActiveProduct(null)
     setView('account')
-    window.history.pushState(
-      { view: 'account' },
-      '',
-      '#account',
-    )
+    window.history.pushState({ view: 'account' }, '', '#account')
   }
 
   function backToShop() {
     setView('shop')
     setNegotiationProduct(null)
 
-    if (
-      window.history.state?.view === 'negotiate' ||
-      window.history.state?.view === 'account'
-    ) {
+    if (window.history.state?.view === 'negotiate' || window.history.state?.view === 'account') {
       window.history.back()
     }
   }
 
+  const header = (
+    <header className="site-header negotiate-header">
+      <div className="site-header-row">
+        <span className="logo">Mercury</span>
+      </div>
+    </header>
+  )
+
   if (view === 'account') {
     return (
       <div className="storefront">
-        <header className="site-header negotiate-header">
-          <div className="site-header-row">
-            <div className="logo">Mercury</div>
-          </div>
-        </header>
-
+        {header}
         <AccountPage onBack={backToShop} />
-
-        <footer className="site-footer">
-          <span>Mercury — test store</span>
-          <span>
-            Negotiation is AI-assisted; every order still passes a
-            fixed approval policy.
-          </span>
-        </footer>
+        <SiteFooter />
       </div>
     )
   }
@@ -1374,25 +1361,9 @@ function App() {
   if (view === 'negotiate' && negotiationProduct) {
     return (
       <div className="storefront">
-        <header className="site-header negotiate-header">
-          <div className="site-header-row">
-            <div className="logo">Mercury</div>
-          </div>
-        </header>
-
-        <NegotiationPage
-          product={negotiationProduct}
-          onBack={backToShop}
-          onDone={backToShop}
-        />
-
-        <footer className="site-footer">
-          <span>Mercury — test store</span>
-          <span>
-            Negotiation is AI-assisted; every order still passes a
-            fixed approval policy.
-          </span>
-        </footer>
+        {header}
+        <NegotiationPage product={negotiationProduct} onBack={backToShop} onDone={backToShop} />
+        <SiteFooter />
       </div>
     )
   }
@@ -1400,15 +1371,16 @@ function App() {
   return (
     <div className="storefront">
       <div className="announcement-bar">
-        Free shipping over ₹2,000 · Test-mode checkout, no real
-        charges
+        <Icon.Lock style={{ width: 13, height: 13 }} />
+        Free shipping over ₹2,000 · <strong>Test-mode checkout</strong> — no real charges
       </div>
 
       <header className="site-header">
         <div className="site-header-row">
-          <div className="logo">Mercury</div>
+          <span className="logo">Mercury</span>
 
           <div className="search-bar">
+            <Icon.Search />
             <input
               type="search"
               placeholder="Search products, categories…"
@@ -1419,12 +1391,8 @@ function App() {
           </div>
 
           <nav className="header-links">
-            <button
-              type="button"
-              className="header-link-button"
-              onClick={goToAccount}
-            >
-              My activity
+            <button type="button" className="header-link-button" onClick={goToAccount}>
+              <Icon.Shield /> My activity
             </button>
           </nav>
         </div>
@@ -1434,9 +1402,7 @@ function App() {
             <button
               type="button"
               key={cat}
-              className={`category-chip ${
-                category === cat ? 'active' : ''
-              }`}
+              className={`category-chip ${category === cat ? 'active' : ''}`}
               onClick={() => setCategory(cat)}
             >
               {CATEGORY_LABELS[cat] || cat}
@@ -1447,19 +1413,29 @@ function App() {
 
       <main className="catalog-section" id="catalog">
         <div className="catalog-heading">
-          <h1>
-            {category === 'all'
-              ? 'Shop all'
-              : CATEGORY_LABELS[category] || category}
-          </h1>
+          <h1>{category === 'all' ? 'Shop all' : CATEGORY_LABELS[category] || category}</h1>
 
-          <span className="muted">
-            {visible.length} item
-            {visible.length === 1 ? '' : 's'}
-          </span>
+          {catalog && (
+            <span className="muted">
+              {visible.length} item{visible.length === 1 ? '' : 's'}
+            </span>
+          )}
         </div>
 
-        {visible.length ? (
+        {catalogError && (
+          <div className="error-banner" style={{ marginBottom: 16 }}>
+            <strong>Showing cached catalog</strong>
+            <span>Couldn't reach the live catalog — showing recently saved listings instead.</span>
+          </div>
+        )}
+
+        {!catalog ? (
+          <div className="product-grid">
+            {Array.from({ length: 8 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        ) : visible.length ? (
           <div className="product-grid">
             {visible.map((product) => (
               <ProductCard
@@ -1473,20 +1449,12 @@ function App() {
         ) : (
           <div className="empty-catalog">
             <strong>No matches</strong>
-            <span>
-              Try a different search term or category.
-            </span>
+            <span>Try a different search term or category.</span>
           </div>
         )}
       </main>
 
-      <footer className="site-footer">
-        <span>Mercury — test store</span>
-        <span>
-          Negotiation is AI-assisted; every order still passes a
-          fixed approval policy.
-        </span>
-      </footer>
+      <SiteFooter />
 
       {activeProduct && (
         <ProductDrawer
