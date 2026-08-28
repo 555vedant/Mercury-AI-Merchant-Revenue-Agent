@@ -107,6 +107,114 @@
       "SMALL_COUNTER": 0.0,
       "TARGET_COUNTER": -0.2,
       "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,100,140,0.18,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,110,140,0.27,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,140,0.33,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,130,140,0.39,3]": {
+      "ACCEPT": 5.395934,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,90,130,0.15,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,110,130,0.26,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,130,0.32,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,130,0.35,3]": {
+      "ACCEPT": 2.88504,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,220,0.15,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,160,220,0.18,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,180,220,0.26,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"SMART-WATCH-005\",7,200,220,0.32,3]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": -0.2,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,100,140,0.19,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,110,140,0.28,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,100,140,0.21,0]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,110,140,0.29,1]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,120,140,0.34,2]": {
+      "ACCEPT": 0.0,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
+    },
+    "[\"WINTER-JACKET-001\",12,130,140,0.4,3]": {
+      "ACCEPT": 1.8418,
+      "SMALL_COUNTER": 0.0,
+      "TARGET_COUNTER": 0.0,
+      "REJECT": 0.0
     }
   },
   "metrics": {
@@ -117,10 +225,10 @@
       "accepted_price": 207.92
     },
     "after": {
-      "negotiations": 3,
-      "conversions": 2,
-      "profit": 132.16,
-      "accepted_price": 398.16
+      "negotiations": 12,
+      "conversions": 9,
+      "profit": 476.81,
+      "accepted_price": 1302.81
     }
   }
 }
