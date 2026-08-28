@@ -1,25 +1,68 @@
 # Mercury — Autonomous AI Merchant
 
-Mercury is an AI-powered merchant agent that negotiates with AI buyers to increase merchant revenue while keeping every deal within strict profit and policy limits.
+Mercury is an autonomous AI merchant built to increase revenue through intelligent negotiation with AI buyers.
 
-### What it does
+It uses Q-Learning to learn profitable negotiation strategies over time. Customer Value Optimization (CVO) adapts negotiation based on customer value. A deterministic Revenue Engine enforces minimum price and margin limits. A Policy Gate controls every transaction before payment.
 
-- AI buyer and merchant negotiation
-- Reinforcement learning for merchant strategy
-- Customer Value Optimization (CVO)
-- Deterministic revenue and margin guardrails
-- Policy-gated transactions
-- Razorpay Test Mode order creation
-- Explainable audit trail for every money decision
+## Screenshots
 
-### Tech Stack
+<p align="center">
+  <img src="./static/img1.png" width="700"/>
+</p>
 
-Python · FastAPI · Gemini · Q-Learning · SQLite · Razorpay Test Mode
+<p align="center">
+  <img src="./static/img2.png" width="340"/>
+  <img src="./static/img3.png" width="340"/>
+</p>
 
-### Core Flow
+## Tech Stack
 
-`Buyer Agent → Negotiation → RL Merchant Agent → Revenue Engine → Policy Gate → Razorpay`
+- Backend: Python, FastAPI (`api.py`)
+- Frontend: React (`frontend/`)
+- Negotiation: Gemini
+- Merchant Strategy: Q-Learning
+- Database: SQLite
+- Payments: Razorpay (Test Mode)
 
-After each completed negotiation, the merchant receives a reward based on conversion, profit, and margin, then updates its persistent Q-table to improve future decisions.
+## Core Flow
 
-> **Note:** Razorpay integration runs in Test Mode. No real money is involved.
+Buyer Agent → Negotiation → RL Merchant Agent → Revenue Engine → Policy Gate → Razorpay
+
+## Running Locally
+
+### Backend
+
+```bash
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+pip install -r requirements.txt
+
+uvicorn api:app --reload --port 8000
+```
+
+Backend runs at `http://localhost:8000`.
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+Frontend runs at `http://localhost:3000`.
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+RAZORPAY_KEY_ID=your_test_key_id
+RAZORPAY_KEY_SECRET=your_test_key_secret
+```
+
+## Note
+
+Razorpay integration runs in Test Mode. No real money is involved.
