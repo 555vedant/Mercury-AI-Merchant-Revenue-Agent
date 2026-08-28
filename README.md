@@ -1,36 +1,25 @@
-﻿# AgenticPay
+# Mercury — Autonomous AI Merchant
 
-A small, Gemini-powered buyer/seller price-negotiation core.
+Mercury is an AI-powered merchant agent that negotiates with AI buyers to increase merchant revenue while keeping every deal within strict profit and policy limits.
 
-## Setup
+### What it does
 
-```powershell
-pip install -r requirements.txt
-$env:GEMINI_API_KEY = "your-key"
-$env:RAZORPAY_KEY_ID = "rzp_test_your_key_id"
-$env:RAZORPAY_KEY_SECRET = "your_test_key_secret"
-python run_negotiation.py
-```
+- AI buyer and merchant negotiation
+- Reinforcement learning for merchant strategy
+- Customer Value Optimization (CVO)
+- Deterministic revenue and margin guardrails
+- Policy-gated transactions
+- Razorpay Test Mode order creation
+- Explainable audit trail for every money decision
 
-The default model is the lightweight `gemini-3.5-flash-lite`. Price decisions are deterministic; if Gemini returns no text, the agents use a built-in fallback sentence and continue negotiating.
+### Tech Stack
 
-To create a Razorpay Test Mode order after an allowed negotiation, opt in explicitly:
+Python · FastAPI · Gemini · Q-Learning · SQLite · Razorpay Test Mode
 
-```powershell
-$env:CREATE_RAZORPAY_TEST_ORDER = "true"
-python run_negotiation.py
-```
+### Core Flow
 
-The runner evaluates the `PolicyGate` first. `BLOCK` and `HUMAN_APPROVAL` results do not call Razorpay. The order amount is converted from rupees to paise and the returned result contains `order_id`, `amount`, `currency`, and `status`.
+`Buyer Agent → Negotiation → RL Merchant Agent → Revenue Engine → Policy Gate → Razorpay`
 
-The project contains a single bilateral environment (`basic-price-negotiation-v0`), `BuyerAgent`, `SellerAgent`, and `GeminiLLM`. Agents must emit price tags: `### BUYER_PRICE($amount) ###` and `### SELLER_PRICE($amount) ###`.
+After each completed negotiation, the merchant receives a reward based on conversion, profit, and margin, then updates its persistent Q-table to improve future decisions.
 
-## API
-
-Start the minimal FastAPI backend:
-
-```powershell
-uvicorn api:app --reload
-```
-
-It provides `GET /catalog`, `POST /negotiate`, `POST /payment/create`, `GET /negotiation/{id}`, and `POST /webhooks/razorpay`. Select one catalog SKU per negotiation. Negotiations and audit records are kept in memory only. A payment order is created only when the stored negotiation has an `ALLOW` policy result.
+> **Note:** Razorpay integration runs in Test Mode. No real money is involved.
